@@ -9,6 +9,7 @@ public class playerController : MonoBehaviour
     private CharacterController charController;
     //　キャラクターの速度
     private Vector3 move;
+    [SerializeField]
     private float speed = 5.0f;
 
     void Start()
