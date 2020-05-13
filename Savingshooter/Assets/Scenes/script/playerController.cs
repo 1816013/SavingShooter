@@ -23,7 +23,7 @@ public class playerController : MonoBehaviour
         //　キャラクターコントローラのコライダが地面と接触してるかどうか
         if (charController.isGrounded)
         {
-            move = (Input.GetAxis("Horizontal") * fpsCamera.transform.right + Input.GetAxis("Vertical") * fpsCamera.transform.forward).normalized;
+            move = (Input.GetAxis("Horizontal") * transform.right + Input.GetAxis("Vertical") * transform.forward).normalized;
         }
         //　重力値を計算
         move.y += Physics.gravity.y * Time.deltaTime;

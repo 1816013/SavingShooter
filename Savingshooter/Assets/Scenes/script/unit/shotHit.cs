@@ -14,12 +14,6 @@ public class shotHit : MonoBehaviour
     {
         enemyStatas = enemy.GetComponent<EnemyStatas>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     void OnTriggerEnter(Collider other)
     {
         //ぶつかったオブジェクトのTagにShellという名前が書いてあったならば（条件）.

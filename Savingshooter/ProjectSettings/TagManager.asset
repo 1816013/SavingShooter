@@ -6,6 +6,10 @@ TagManager:
   tags:
   - shell
   - ground
+  - FxTemporaire
+  - enemyAttack
+  - enemy
+  - Item
   layers:
   - Default
   - TransparentFX

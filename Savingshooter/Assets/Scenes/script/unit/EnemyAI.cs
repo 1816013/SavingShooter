@@ -11,6 +11,7 @@ public class EnemyAI : MonoBehaviour
     }
     public GameObject detonator;        // 爆発プレハブ
     public GameObject enemyMat;         // 敵のマテリアル
+    public GameObject enemyAttack;      // 攻撃
     private GameObject target;          // プレイヤー
     private EnemyState enemyState;      // エネミーのステータス
     private CharacterController charController; // キャラのコントローラー
@@ -25,7 +26,7 @@ public class EnemyAI : MonoBehaviour
     {
         masterColor = enemyMat.GetComponent<Renderer>().material.color;
         charController = GetComponent<CharacterController>();
-        sphereCollider = GetComponent<SphereCollider>();
+        sphereCollider = enemyAttack.GetComponent<SphereCollider>();
         sphereCollider.enabled = false;
         enemyState = EnemyState.Chase;
         target = GameObject.Find("Player");
@@ -63,14 +64,5 @@ public class EnemyAI : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         enemyMat.GetComponent<Renderer>().material.color = masterColor;
         yield return new WaitForSeconds(0.2f);
-    }
-
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Player")
-        {
-            target.GetComponent<PlayerStatas>().AddPlayerEnergy(-20);
-        }
     }
 }
