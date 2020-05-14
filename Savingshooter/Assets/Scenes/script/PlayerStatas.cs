@@ -9,12 +9,6 @@ public class PlayerStatas : MonoBehaviour
     private float playerPower = 0.5f;  // 出力
     private float powerCost;            // エネルギー消費の係数
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void FixedUpdate()
     {

@@ -165,10 +165,10 @@ GameObject:
   - component: {fileID: 952804616104246181}
   - component: {fileID: 952804616100821893}
   - component: {fileID: 952804616101951813}
-  - component: {fileID: 952804616089631805}
+  - component: {fileID: 6070239508930015197}
   m_Layer: 0
   m_Name: PA_Drone
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -235,20 +235,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &952804616089631805
-MonoBehaviour:
+--- !u!64 &6070239508930015197
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 952804616103880581}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6392398dd4338f419cd9fed31f7582a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemy: {fileID: 952804616672127951}
-  damage: 50
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300000, guid: f14b6f7503476eb4e9b2afc1cc05e719, type: 3}
 --- !u!1 &952804616103880583
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,6 +311,7 @@ GameObject:
   - component: {fileID: 952804616104246189}
   - component: {fileID: 952804616100821891}
   - component: {fileID: 952804616101951811}
+  - component: {fileID: 4841950281535910750}
   m_Layer: 0
   m_Name: PA_DroneWingLeft
   m_TagString: Untagged
@@ -378,6 +379,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &4841950281535910750
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952804616103880589}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300002, guid: f14b6f7503476eb4e9b2afc1cc05e719, type: 3}
 --- !u!1 &952804616103880591
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,6 +404,7 @@ GameObject:
   - component: {fileID: 952804616104246191}
   - component: {fileID: 952804616100821901}
   - component: {fileID: 952804616101951821}
+  - component: {fileID: 1858608961019688421}
   m_Layer: 0
   m_Name: PA_DroneWingRight
   m_TagString: Untagged
@@ -456,6 +472,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &1858608961019688421
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952804616103880591}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300006, guid: f14b6f7503476eb4e9b2afc1cc05e719, type: 3}
 --- !u!1 &952804616672127951
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,6 +499,7 @@ GameObject:
   - component: {fileID: 952804616672127946}
   - component: {fileID: 952804616672127947}
   - component: {fileID: 952804616672127944}
+  - component: {fileID: 6867677604394291578}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -553,6 +584,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6867677604394291578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952804616672127951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6392398dd4338f419cd9fed31f7582a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 952804616672127951}
 --- !u!1 &7287759727364212857
 GameObject:
   m_ObjectHideFlags: 0
@@ -593,7 +637,7 @@ SphereCollider:
   m_GameObject: {fileID: 7287759727364212857}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}

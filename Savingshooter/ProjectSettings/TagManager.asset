@@ -10,6 +10,7 @@ TagManager:
   - enemyAttack
   - enemy
   - Item
+  - terrian
   layers:
   - Default
   - TransparentFX

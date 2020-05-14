@@ -5,9 +5,7 @@ using UnityEngine;
 public class shotHit : MonoBehaviour
 {
     public GameObject enemy;   //敵オブジェクト
-    public int damage = 50;          //当たった部位毎のダメージ量
-   
-    private EnemyStatas enemyStatas;              //HPクラス
+    private EnemyStatas enemyStatas;              //Statasクラス
 
     // Start is called before the first frame update
     void Start()
@@ -16,7 +14,6 @@ public class shotHit : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        //ぶつかったオブジェクトのTagにShellという名前が書いてあったならば（条件）.
         if (other.CompareTag("shell"))
         {
             ShotStatas shotStatas = other.GetComponent<ShotStatas>();
