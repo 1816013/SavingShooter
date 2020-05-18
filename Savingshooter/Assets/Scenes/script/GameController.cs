@@ -13,8 +13,6 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         score = 0;
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
     }
     // Update is called once per frame
     void Update()
@@ -25,22 +23,16 @@ public class GameController : MonoBehaviour
             if(pauseUI.activeSelf)
             {
                 Time.timeScale = 0;
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
             }
             else
             {  
                 Time.timeScale = 1;
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
             }
         }
     }
 
     public void ChangeScene()
     {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene("clearScene");
     }
 
