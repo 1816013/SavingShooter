@@ -11,7 +11,7 @@ public class NowAmmo : MonoBehaviour
     void FixedUpdate()
     {
         Text popText = textobj.GetComponent<Text>();
-        int nowAmmo = shooting.GetComponent<FpsShooting>().GetNowAmmo();
+        int nowAmmo = shooting.GetComponent<TpsShooting>().GetNowAmmo();
         popText.text = "Ammo " + nowAmmo.ToString();
     }
 }

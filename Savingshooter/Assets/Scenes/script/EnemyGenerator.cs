@@ -14,8 +14,8 @@ public class EnemyGenerator : MonoBehaviour
     //経過時間
     private float time = 0f;    // 経過時間
 
-    private Vector3 min = new Vector3(13, 5, -30); //時間間隔の最小値  
-    private Vector3 max = new Vector3(30, 2, -10); //時間間隔の最大値
+    private Vector3 min = new Vector3(13, 2, -30); //時間間隔の最小値  
+    private Vector3 max = new Vector3(30, 5, -10); //時間間隔の最大値
 
     // Start is called before the first frame update
     void Start()

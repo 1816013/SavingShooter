@@ -12,8 +12,9 @@ public class EnemyAI : MonoBehaviour
     public GameObject detonator;        // 爆発プレハブ
     public GameObject enemyMat;         // 敵のマテリアル
     public GameObject enemyAttack;      // 攻撃
+    private EnemyStatas enemyStatas;     // エネミーのステータス
     private GameObject target;          // プレイヤー
-    private EnemyState enemyState;      // エネミーのステータス
+    private EnemyState enemyState;      // エネミーのAI
     private CharacterController charController; // キャラのコントローラー
     private float attackDistanse = 5.0f;    // 攻撃距離
     private Vector3 move;                   // 移動ベクトル
@@ -24,36 +25,41 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        enemyStatas = transform.GetComponentInParent<EnemyStatas>();
         masterColor = enemyMat.GetComponent<Renderer>().material.color;
         charController = GetComponent<CharacterController>();
         sphereCollider = enemyAttack.GetComponent<SphereCollider>();
         sphereCollider.enabled = false;
         enemyState = EnemyState.Chase;
-        target = GameObject.Find("Player");
+        target = GameObject.FindWithTag("Player");
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.LookAt(target.transform.position);
-        if(enemyState == EnemyState.Chase)
+        if (!enemyStatas.IsDeath())
         {
-            move = (target.transform.position - transform.position).normalized ;
-            charController.Move(move * speed * Time.deltaTime);
-            if ((target.transform.position - transform.position).magnitude <= attackDistanse)
+            transform.LookAt(target.transform.position);
+            if (enemyState == EnemyState.Chase)
             {
-                enemyState = EnemyState.Destoroy;
+                move = (target.transform.position - transform.position).normalized;
+                move.y += Physics.gravity.y * Time.deltaTime;
+                charController.Move(move * speed * Time.deltaTime);
+                if ((target.transform.position - transform.position).magnitude <= attackDistanse)
+                {
+                    enemyState = EnemyState.Destoroy;
+                }
             }
-        }
-        if(enemyState == EnemyState.Destoroy)
-        {
-            attackIntarval += Time.deltaTime;
-            StartCoroutine("RedBlink");
-            if (attackIntarval > 2.0f)
+            if (enemyState == EnemyState.Destoroy)
             {
-                sphereCollider.enabled = true;
-                GameObject exp = (GameObject)Instantiate(detonator.gameObject, transform.position, Quaternion.identity);
-                Destroy(gameObject,0.1f);
+                attackIntarval += Time.deltaTime;
+                StartCoroutine("RedBlink");
+                if (attackIntarval > 2.0f)
+                {
+                    sphereCollider.enabled = true;
+                    GameObject exp = (GameObject)Instantiate(detonator.gameObject, transform.position, Quaternion.identity);
+                    Destroy(gameObject, 0.1f);
+                }
             }
         }
         
