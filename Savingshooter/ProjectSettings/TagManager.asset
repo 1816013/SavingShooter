@@ -20,11 +20,11 @@ TagManager:
   - UI
   - 
   - 
-  - PostProcessing
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - Item
+  - MiniMap
+  - Destroy
   - 
   - 
   - 
