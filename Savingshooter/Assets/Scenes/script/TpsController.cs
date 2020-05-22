@@ -40,7 +40,8 @@ public class TpsController : MonoBehaviour
 
     void FixedUpdate()
     {
-        var ray = tpsCamera.ScreenPointToRay(Input.mousePosition);
+        // カメラからマウスの場所までののレイ(0.25はプレイヤーの銃がずれているから調整のため)
+        var ray = tpsCamera.ScreenPointToRay(Input.mousePosition + new Vector3(0.25f, 0));  
 
         // プレイヤーの高さにPlaneを更新して、カメラの情報を元に地面判定して距離を取得
         plane.SetNormalAndPosition(Vector3.up, transform.localPosition);

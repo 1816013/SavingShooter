@@ -5,13 +5,20 @@ using UnityEngine;
 public class ItemGenerator : MonoBehaviour
 {
     public GameObject itemPrefab;
+    private ObjectPooling _pool;
     public GameObject player;
     private PlayerStatas playerStatas;
     private bool instanceF;   // 生成するか
     private float intervalTime;     // 経過時間
     private float time;             // 2秒ごとにランダムにする時用
-    private float minTime = 10;  // これ以上じゃないと生成しない
-    private float maxTime = 30;  // これ以上になると強制生成
+    private float minTime = 0;  // これ以上じゃないと生成しない
+    private float maxTime = 3;  // これ以上になると強制生成
+
+    private void Start()
+    {
+        _pool = gameObject.GetComponent<ObjectPooling>();
+        _pool.CreatePool(itemPrefab, 5, itemPrefab.GetInstanceID());
+    }
 
     // Update is called once per frame
     void FixedUpdate()
@@ -26,8 +33,8 @@ public class ItemGenerator : MonoBehaviour
         
         if (intervalTime >= maxTime || intervalTime >= minTime && instanceF)
         { 
-            GameObject item = Instantiate(itemPrefab);
-            item.transform.position = new Vector3(0.0f, -1.0f, -13.0f);
+            GameObject item = _pool.GetPoolObj(itemPrefab.GetInstanceID());
+            item.transform.position = new Vector3(10.0f, 0.0f, -6.0f);
             intervalTime = 0.0f;
         }
     }

@@ -6,6 +6,8 @@ public class EnemyGenerator : MonoBehaviour
 {
     //敵プレハブ
     public GameObject enemyPrefab;
+
+    private ObjectPooling _pool;
     
     public float minTime = 2f; //時間間隔の最小値 
     public float maxTime = 5f; //時間間隔の最大値
@@ -22,6 +24,8 @@ public class EnemyGenerator : MonoBehaviour
     {
         //時間間隔を決定する
         interval = GetRandomF(minTime, maxTime);
+        _pool = gameObject.GetComponent<ObjectPooling>();
+        _pool.CreatePool(enemyPrefab, 10, enemyPrefab.GetInstanceID());
     }
 
     // Update is called once per frame
@@ -31,7 +35,7 @@ public class EnemyGenerator : MonoBehaviour
 
         if (time > interval)
         {
-            GameObject enemy = Instantiate(enemyPrefab);
+            GameObject enemy = _pool.GetPoolObj(enemyPrefab.GetInstanceID());
             enemy.transform.position = GetRandomVec(min, max);
             time = 0f;
             interval = GetRandomF(minTime,maxTime);

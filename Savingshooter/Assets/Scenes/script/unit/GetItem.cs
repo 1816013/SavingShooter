@@ -9,8 +9,8 @@ public class GetItem : MonoBehaviour
     {
         if (other.tag == "Item")
         {
-           gameObject.GetComponent<PlayerStatas>().AddPlayerEnergy(50);
-           Destroy(other.gameObject);
+            gameObject.GetComponent<PlayerStatas>().AddPlayerEnergy(50);
+            other.gameObject.SetActive(false);
         }
     }
 }

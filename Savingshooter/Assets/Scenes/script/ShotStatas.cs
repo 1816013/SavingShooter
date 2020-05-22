@@ -15,6 +15,19 @@ public class ShotStatas : MonoBehaviour
         playerStatas = player.GetComponent<PlayerStatas>();
         shotPower = playerStatas.GetPlayerPower() * 100.0f;
     }
+    private void OnEnable()
+    {
+        StartCoroutine(DelayObject(3.0f));
+    }
+    private void DestroyBullet()
+    {
+        this.gameObject.SetActive(false);
+    }
+    IEnumerator DelayObject(float time)
+    {
+        yield return new WaitForSeconds(time);
+        gameObject.SetActive(false);
+    }
 
     public float GetShotPower()
     {

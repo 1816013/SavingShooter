@@ -21,17 +21,25 @@ public class EnemyAI : MonoBehaviour
     private float speed = 3.0f;             // 移動速度
     private SphereCollider sphereCollider;  // 爆発の効果範囲
     private float attackIntarval;           // 攻撃間隔
-    private Color masterColor;              // マテリアルの元の色
+    private IEnumerator coroutine;
     // Start is called before the first frame update
     void Start()
     {
         enemyStatas = transform.GetComponentInParent<EnemyStatas>();
-        masterColor = enemyMat.GetComponent<Renderer>().material.color;
         charController = GetComponent<CharacterController>();
         sphereCollider = enemyAttack.GetComponent<SphereCollider>();
         sphereCollider.enabled = false;
         enemyState = EnemyState.Chase;
         target = GameObject.FindWithTag("Player");
+        coroutine = enemyStatas.RedBlink();
+    }
+    private void OnDisable()
+    {
+        if (enemyState == EnemyState.Destoroy)
+        {
+            sphereCollider.enabled = false;
+            enemyState = EnemyState.Chase;
+        }
     }
 
     // Update is called once per frame
@@ -48,27 +56,32 @@ public class EnemyAI : MonoBehaviour
                 if ((target.transform.position - transform.position).magnitude <= attackDistanse)
                 {
                     enemyState = EnemyState.Destoroy;
+                    StartCoroutine(coroutine);
                 }
             }
             if (enemyState == EnemyState.Destoroy)
             {
                 attackIntarval += Time.deltaTime;
-                StartCoroutine("RedBlink");
                 if (attackIntarval > 2.0f)
                 {
+                    StartCoroutine(DelayDestroy(1));
+                    StopCoroutine(coroutine);
                     sphereCollider.enabled = true;
                     GameObject exp = (GameObject)Instantiate(detonator.gameObject, transform.position, Quaternion.identity);
-                    Destroy(gameObject, 0.1f);
                 }
             }
         }
         
     }
-    IEnumerator RedBlink()
+    IEnumerator DelayDestroy(int delayFrameCount)
     {
-        enemyMat.GetComponent<Renderer>().material.color = Color.red;
-        yield return new WaitForSeconds(0.2f);
-        enemyMat.GetComponent<Renderer>().material.color = masterColor;
-        yield return new WaitForSeconds(0.2f);
+        for (var i = 0; i < delayFrameCount; i++)
+        {
+            yield return null;
+        }
+        gameObject.SetActive(false);
+        attackIntarval = 0;
+        yield break;
     }
+   
 }

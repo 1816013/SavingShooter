@@ -13,11 +13,18 @@ public class itemStatas : MonoBehaviour
     public float destroyTime = 10.0f;
 
     // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
         itemType = ItemType.EnergyPack;
-        Destroy(gameObject, destroyTime);
+        StartCoroutine(DelayObject(destroyTime));
     }
+
+    IEnumerator DelayObject(float time)
+    {
+        yield return new WaitForSeconds(time);
+        gameObject.SetActive(false);
+    }
+
     public ItemType GetItemType()
     {
         return itemType;
