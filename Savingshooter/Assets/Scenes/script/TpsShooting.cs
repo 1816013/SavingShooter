@@ -9,15 +9,19 @@ public class TpsShooting : MonoBehaviour
     public GameObject gameController;
     private ObjectPooling _pool;
     private GameObject player;
+    private PlayerStatas playerStatas;
     public int maxAmmo = 50;
     private int nowAmmo;
     private float shotInterval = 0.0f;
     private bool shotF = false;
+    private bool reloading = false;
+    private float reloadInterval = 0.0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("Player");
+        player = transform.root.gameObject;
+        playerStatas = player.GetComponent<PlayerStatas>();
         animator = player.GetComponentInChildren<Animator>();
         nowAmmo = maxAmmo;
         _pool = gameController.GetComponent<ObjectPooling>();
@@ -27,26 +31,41 @@ public class TpsShooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Mouse0))
+        if (!reloading)
         {
-            animator.SetBool("shotF", true);
-            shotInterval += 1;
-            if (shotInterval % 5 == 0 && nowAmmo > 0)
+            if (Input.GetKey(KeyCode.Mouse0))
             {
-                shotF = true;
+                animator.SetBool("shotF", true);
+                shotInterval += 1;
+                if (shotInterval % 5 == 0 && nowAmmo > 0)
+                {
+                    shotF = true;
+                }
+            }
+            else
+            {
+                animator.SetBool("shotF", false);
+                if (Input.GetKeyDown(KeyCode.R))   // リロード
+                {
+                    if (nowAmmo != maxAmmo)
+                    {
+                        reloadInterval = 0;
+                        animator.SetBool("Reload", true);
+                        playerStatas.AddPlayerEnergy(-5);
+                        reloading = true;
+                        nowAmmo = maxAmmo;
+                    }
+                }
             }
         }
         else
         {
-            animator.SetBool("shotF", false);
-            if (Input.GetKeyDown(KeyCode.R))   // リロード
-            {
-                if (nowAmmo != maxAmmo)
-                {
-                    player.GetComponent<PlayerStatas>().AddPlayerEnergy(-5);
-                    nowAmmo = maxAmmo;
-                }
-            }
+            reloadInterval += Time.deltaTime;
+        }
+        if(reloadInterval > 1)
+        {
+            reloading = false;
+            animator.SetBool("Reload", false);
         }
     }
     private void FixedUpdate()
@@ -62,7 +81,7 @@ public class TpsShooting : MonoBehaviour
             Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
             bulletRb.velocity = Vector3.zero;
             bulletRb.AddForce(transform.forward * 1500);
-                shotF = false;
+            shotF = false;
             
         }
     }

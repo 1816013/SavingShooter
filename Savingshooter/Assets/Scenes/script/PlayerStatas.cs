@@ -5,9 +5,15 @@ using UnityEngine;
 public class PlayerStatas : MonoBehaviour
 {
     public GameController gameController;
-    private float playerEnergy = 200.0f; // エネルギー
+    private Animator animator;
+    private float playerEnergy = 20.0f; // エネルギー
     private float playerPower = 0.5f;  // 出力
     private float powerCost;            // エネルギー消費の係数
+
+    private void Start()
+    {
+        animator = gameObject.GetComponentInChildren<Animator>();
+    }
 
     // Update is called once per frame
     void FixedUpdate()
@@ -34,7 +40,8 @@ public class PlayerStatas : MonoBehaviour
     
         if(playerEnergy <= 0)
         {
-            gameController.GetComponent<GameController>().ChangeScene();
+            animator.SetBool("Die", true);
+            Invoke("DieCall", 2.0f);
         }
     }
     public float GetPlayerPower()
@@ -48,5 +55,9 @@ public class PlayerStatas : MonoBehaviour
     public void AddPlayerEnergy(float add)
     {
         playerEnergy += add;
+    }
+    private void DieCall()
+    {
+        gameController.GetComponent<GameController>().ChangeScene();
     }
 }

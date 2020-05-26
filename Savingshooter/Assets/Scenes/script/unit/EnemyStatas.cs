@@ -11,14 +11,14 @@ public class EnemyStatas : MonoBehaviour
     [SerializeField]
     private float hitPoint = 100.0f;
     private int score = 50;     // 敵の強さで変わる
-    private Renderer renderer;
+    private Renderer _renderer;
     private Color masterColor;
 
     private void Awake()
     {
         animator = transform.GetComponentInChildren<Animator>();
-        renderer = gameObject.GetComponentInChildren<Renderer>();
-        masterColor = renderer.material.color;
+        _renderer = gameObject.GetComponentInChildren<Renderer>();
+        masterColor = _renderer.material.color;
     }
 
     private void Start()
@@ -34,7 +34,7 @@ public class EnemyStatas : MonoBehaviour
     }
     private void OnDisable()
     {
-        renderer.material.color = masterColor;
+        _renderer.material.color = masterColor;
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -69,9 +69,9 @@ public class EnemyStatas : MonoBehaviour
     {
         while (true)
         {
-            renderer.material.color = Color.red;
+            _renderer.material.color = Color.red;
             yield return new WaitForSeconds(0.1f);
-            renderer.material.color = masterColor;
+            _renderer.material.color = masterColor;
             yield return new WaitForSeconds(0.1f);
         }
     }
