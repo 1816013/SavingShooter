@@ -20,30 +20,31 @@ public class ObjectPooling : MonoBehaviour
         }
         for(int i = 0; i < maxCount; i++)
         {
-            GameObject newObj = CreateNewObject();
+            GameObject newObj = CreateNewObject(Vector3.zero);
             newObj.SetActive(false);
             _poolList[key].Add(newObj);
         }
     }
-    public GameObject GetPoolObj(int key)
+    public GameObject GetPoolObj(int key, Vector3 pos)
     {
         foreach(GameObject obj in _poolList[key])
         {
             if(obj.activeSelf == false)
             {
+                obj.transform.position = pos;
                 obj.SetActive(true);
                 return obj;
             }
         }
-        GameObject newObj = CreateNewObject();
+        GameObject newObj = CreateNewObject(pos);   
         newObj.SetActive(true);
         _poolList[key].Add(newObj);
         return newObj;
     }
 
-    private GameObject CreateNewObject()
+    private GameObject CreateNewObject(Vector3 pos)
     {
-        GameObject newObj = Instantiate(_poolObj);
+        GameObject newObj = Instantiate(_poolObj, pos, Quaternion.identity);
        //newObj.name = _poolObj.name + (_poolList.Count + 1);
 
         return newObj;

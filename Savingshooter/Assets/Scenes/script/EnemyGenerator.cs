@@ -9,15 +9,19 @@ public class EnemyGenerator : MonoBehaviour
 
     private ObjectPooling _pool;
     
-    public float minTime = 2f; //時間間隔の最小値 
-    public float maxTime = 5f; //時間間隔の最大値
+    public float minTime = 2f; // 時間間隔の最小値 
+    public float maxTime = 5f; // 時間間隔の最大値
     //敵生成時間間隔
     private float interval;
     //経過時間
     private float time = 0f;    // 経過時間
 
-    private Vector3 min = new Vector3(13, 2, -30); //時間間隔の最小値  
-    private Vector3 max = new Vector3(30, 5, -10); //時間間隔の最大値
+    private Vector3 minVec = new Vector3(-1, 0, -1); // 出現場所の最小値  ※ 距離に変える予定
+    private Vector3 maxVec = new Vector3(1, 0, 1); // 出現場所の最大値  ※ 距離に変える予定
+
+    private float minDistance = 3;
+    private float maxDistance = 5;
+
 
     // Start is called before the first frame update
     void Start()
@@ -35,8 +39,12 @@ public class EnemyGenerator : MonoBehaviour
 
         if (time > interval)
         {
-            GameObject enemy = _pool.GetPoolObj(enemyPrefab.GetInstanceID());
-            enemy.transform.position = GetRandomVec(min, max);
+            _pool.GetPoolObj(enemyPrefab.GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
+            _pool.GetPoolObj(enemyPrefab.GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
+            _pool.GetPoolObj(enemyPrefab.GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
+            _pool.GetPoolObj(enemyPrefab.GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
+            _pool.GetPoolObj(enemyPrefab.GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
+            _pool.GetPoolObj(enemyPrefab.GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
             time = 0f;
             interval = GetRandomF(minTime,maxTime);
         }

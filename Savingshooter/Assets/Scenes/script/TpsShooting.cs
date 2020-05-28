@@ -75,8 +75,7 @@ public class TpsShooting : MonoBehaviour
             
             nowAmmo -= 1;
             //Instantiate(bulletPrefab, transform.position, Quaternion.Euler(transform.parent.eulerAngles.x, transform.parent.eulerAngles.y, 0))
-            GameObject bullet = _pool.GetPoolObj(bulletPrefab.GetInstanceID());
-            bullet.transform.position = transform.position;
+            GameObject bullet = _pool.GetPoolObj(bulletPrefab.GetInstanceID(), transform.position);
             bullet.transform.rotation = Quaternion.Euler(transform.parent.eulerAngles.x, transform.parent.eulerAngles.y, 0);
             Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
             bulletRb.velocity = Vector3.zero;

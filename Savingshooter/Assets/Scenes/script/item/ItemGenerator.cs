@@ -33,8 +33,7 @@ public class ItemGenerator : MonoBehaviour
         
         if (intervalTime >= maxTime || intervalTime >= minTime && instanceF)
         { 
-            GameObject item = _pool.GetPoolObj(itemPrefab.GetInstanceID());
-            item.transform.position = new Vector3(10.0f, 0.0f, -6.0f);
+            GameObject item = _pool.GetPoolObj(itemPrefab.GetInstanceID(), new Vector3(10.0f, 0.0f, -6.0f));
             intervalTime = 0.0f;
         }
     }
