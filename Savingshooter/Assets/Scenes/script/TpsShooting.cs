@@ -25,7 +25,7 @@ public class TpsShooting : MonoBehaviour
         animator = player.GetComponentInChildren<Animator>();
         nowAmmo = maxAmmo;
         _pool = gameController.GetComponent<ObjectPooling>();
-        _pool.CreatePool(bulletPrefab, maxAmmo, bulletPrefab.GetInstanceID());
+        _pool.CreatePool(bulletPrefab, maxAmmo, bulletPrefab.GetInstanceID(), Vector3.zero);
     }
 
     // Update is called once per frame
@@ -47,15 +47,12 @@ public class TpsShooting : MonoBehaviour
                 animator.SetBool("shotF", false);
                 if (Input.GetKeyDown(KeyCode.R))   // リロード
                 {
-                    if (nowAmmo != maxAmmo)
-                    {
-                        reloadInterval = 0;
-                        animator.SetBool("Reload", true);
-                        playerStatas.AddPlayerEnergy(-5);
-                        reloading = true;
-                        nowAmmo = maxAmmo;
-                    }
+                    Reload();
                 }
+            }
+            if(nowAmmo == 0)
+            {
+                Reload();
             }
         }
         else
@@ -79,9 +76,22 @@ public class TpsShooting : MonoBehaviour
             bullet.transform.rotation = Quaternion.Euler(transform.parent.eulerAngles.x, transform.parent.eulerAngles.y, 0);
             Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
             bulletRb.velocity = Vector3.zero;
-            bulletRb.AddForce(transform.forward * 1500);
+            bulletRb.AddForce(transform.forward * 5000);
             shotF = false;
             
+        }
+    }
+
+    private void Reload()
+    {
+        if (nowAmmo != maxAmmo)
+        {          
+            reloadInterval = 0;
+            animator.SetBool("shotF", false);
+            animator.SetBool("Reload", true);
+            playerStatas.AddPlayerEnergy(-5);
+            reloading = true;
+            nowAmmo = maxAmmo;
         }
     }
 

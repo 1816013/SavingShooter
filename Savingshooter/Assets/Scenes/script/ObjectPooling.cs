@@ -11,7 +11,7 @@ public class ObjectPooling : MonoBehaviour
     {
         _poolList = new Dictionary<int, List<GameObject>>();
     }
-    public void CreatePool(GameObject obj, int maxCount, int key)
+    public void CreatePool(GameObject obj, int maxCount, int key, Vector3 pos)
     {
         _poolObj = obj;
         if (_poolList.ContainsKey(key) == false)
@@ -20,7 +20,7 @@ public class ObjectPooling : MonoBehaviour
         }
         for(int i = 0; i < maxCount; i++)
         {
-            GameObject newObj = CreateNewObject(Vector3.zero);
+            GameObject newObj = CreateNewObject(pos);
             newObj.SetActive(false);
             _poolList[key].Add(newObj);
         }

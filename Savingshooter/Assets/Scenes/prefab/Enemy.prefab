@@ -497,6 +497,7 @@ GameObject:
   - component: {fileID: 952804616672127948}
   - component: {fileID: 952804616672127949}
   - component: {fileID: 6867677604394291578}
+  - component: {fileID: 2138115842258558637}
   - component: {fileID: 952804616672127946}
   - component: {fileID: 952804616672127947}
   - component: {fileID: 952804616672127944}
@@ -549,6 +550,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6392398dd4338f419cd9fed31f7582a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2138115842258558637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952804616672127951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3f754de26dbb544b9fba4c009dcf9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &952804616672127946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -562,7 +575,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detonator: {fileID: 100002, guid: 6890a03af913b874092fbb1e8337747d, type: 3}
-  enemyMat: {fileID: 952804616103880581}
   enemyAttack: {fileID: 7287759727364212857}
 --- !u!143 &952804616672127947
 CharacterController:

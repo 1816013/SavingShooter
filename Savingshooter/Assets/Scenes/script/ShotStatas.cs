@@ -19,6 +19,16 @@ public class ShotStatas : MonoBehaviour
     {
         StartCoroutine(DelayObject(3.0f));
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(!other.CompareTag("enemy")&& !other.CompareTag("Player") && !other.CompareTag("Item"))
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+
     private void DestroyBullet()
     {
         this.gameObject.SetActive(false);

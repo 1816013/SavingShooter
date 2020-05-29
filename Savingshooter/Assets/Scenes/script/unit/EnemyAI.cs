@@ -10,10 +10,9 @@ public class EnemyAI : MonoBehaviour
         Destoroy
     }
     public GameObject detonator;        // 爆発プレハブ
-    public GameObject enemyMat;         // 敵のマテリアル
-    public GameObject enemyAttack;      // 攻撃
+    public GameObject enemyAttack;      // 攻撃    
     private EnemyStatas enemyStatas;     // エネミーのステータス
-    private GameObject target;          // プレイヤー
+   // private GameObject target;          // プレイヤー
     private EnemyState enemyState;      // エネミーのAI
     private CharacterController charController; // キャラのコントローラー
     private float attackDistanse = 5.0f;    // 攻撃距離
@@ -22,16 +21,31 @@ public class EnemyAI : MonoBehaviour
     private SphereCollider sphereCollider;  // 爆発の効果範囲
     private float attackIntarval;           // 攻撃間隔
     private IEnumerator coroutine;
+    private Pathfinding pathfinding;
+    private TagetStatas _target;
     // Start is called before the first frame update
+
+
+    private void Awake()
+    {
+        pathfinding = gameObject.GetComponent<Pathfinding>();
+    }
+
+
     void Start()
     {
         enemyStatas = transform.GetComponentInParent<EnemyStatas>();
         charController = GetComponent<CharacterController>();
         sphereCollider = enemyAttack.GetComponent<SphereCollider>();
         sphereCollider.enabled = false;
-        enemyState = EnemyState.Chase;
-        target = GameObject.FindWithTag("Player");
+
         coroutine = enemyStatas.RedBlink();
+    }
+    private void OnEnable()
+    {
+        _target = new TagetStatas();
+       // _target = pathfinding.PathFind(transform.position, 0.5f);
+        enemyState = EnemyState.Chase;       
     }
     private void OnDisable()
     {
@@ -47,13 +61,28 @@ public class EnemyAI : MonoBehaviour
     {
         if (!enemyStatas.IsDeath())
         {
-            transform.LookAt(target.transform.position);
+            TagetStatas target = pathfinding.PathFind(transform.position, charController.radius);
+            transform.LookAt(target.pos);
+            if(target.player)
+            {
+                _target = target;
+            }
+            else
+            {
+                if ((_target.pos - transform.position).magnitude < 0.1f)
+                {
+
+                    _target = target;
+                }
+            }
+           
+          
             if (enemyState == EnemyState.Chase)
             {
-                move = (target.transform.position - transform.position).normalized;
+                move = transform.forward;
                 move.y += Physics.gravity.y * Time.deltaTime;
                 charController.Move(move * speed * Time.deltaTime);
-                if ((target.transform.position - transform.position).magnitude <= attackDistanse)
+                if ((_target.pos - transform.position).magnitude <= attackDistanse && _target.player)
                 {
                     enemyState = EnemyState.Destoroy;
                     StartCoroutine(coroutine);
@@ -66,7 +95,7 @@ public class EnemyAI : MonoBehaviour
                 {
                     StartCoroutine(DelayDestroy(1));
                     StopCoroutine(coroutine);
-                    sphereCollider.enabled = true;
+                  //  sphereCollider.enabled = true;
                     GameObject exp = (GameObject)Instantiate(detonator.gameObject, transform.position, Quaternion.identity);
                 }
             }

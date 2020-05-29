@@ -19,8 +19,8 @@ public class EnemyGenerator : MonoBehaviour
     private Vector3 minVec = new Vector3(-1, 0, -1); // 出現場所の最小値  ※ 距離に変える予定
     private Vector3 maxVec = new Vector3(1, 0, 1); // 出現場所の最大値  ※ 距離に変える予定
 
-    private float minDistance = 3;
-    private float maxDistance = 5;
+    private float minDistance = 30;
+    private float maxDistance = 35;
 
 
     // Start is called before the first frame update
@@ -29,7 +29,8 @@ public class EnemyGenerator : MonoBehaviour
         //時間間隔を決定する
         interval = GetRandomF(minTime, maxTime);
         _pool = gameObject.GetComponent<ObjectPooling>();
-        _pool.CreatePool(enemyPrefab, 10, enemyPrefab.GetInstanceID());
+        // エネミーは作られた瞬間にレイキャストする関係上座標入力が必要
+        _pool.CreatePool(enemyPrefab, 10, enemyPrefab.GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
     }
 
     // Update is called once per frame
