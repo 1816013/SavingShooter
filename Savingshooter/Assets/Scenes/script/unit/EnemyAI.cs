@@ -4,104 +4,95 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
-    enum EnemyState
+    enum EnemyAIState
     {
         Chase,
-        Destoroy
+        Attack
     }
-    public GameObject detonator;        // 爆発プレハブ
-    public GameObject enemyAttack;      // 攻撃    
-    private EnemyStatas enemyStatas;     // エネミーのステータス
-   // private GameObject target;          // プレイヤー
-    private EnemyState enemyState;      // エネミーのAI
-    private CharacterController charController; // キャラのコントローラー
-    private float attackDistanse = 5.0f;    // 攻撃距離
-    private Vector3 move;                   // 移動ベクトル
-    private float speed = 3.0f;             // 移動速度
-    private SphereCollider sphereCollider;  // 爆発の効果範囲
-    private float attackIntarval;           // 攻撃間隔
-    private IEnumerator coroutine;
-    private Pathfinding pathfinding;
+    public GameObject _detonator;        // 爆発プレハブ
+    public GameObject _enemyAttack;      // 敵が攻撃する場所    
+    private EnemyStatas _enemyStatas;     // エネミーのステータス
+    private EnemyAIState _enemyAIState;      // エネミーのAI
+    private EnemyShooting _enemyShooting;
+    private CharacterController _charController; // キャラのコントローラー
+    private float _attackDistanse;    // 攻撃距離
+    private Vector3 _move;                   // 移動ベクトル
+    private float _speed;             // 移動速度
+    private SphereCollider _sphereCollider;  // 爆発の効果範囲
+    private float _attackTime;           // 攻撃間隔用経過時間
+    private float _attackInterval;
+    private IEnumerator _coroutine;
+    private Pathfinding _pathfinding;
     private TagetStatas _target;
+    private LineRenderer _lazerPointer;
+
     // Start is called before the first frame update
-
-
     private void Awake()
     {
-        pathfinding = gameObject.GetComponent<Pathfinding>();
+        _pathfinding = gameObject.GetComponent<Pathfinding>();
+        _enemyStatas = transform.GetComponentInParent<EnemyStatas>();      
     }
 
-
-    void Start()
-    {
-        enemyStatas = transform.GetComponentInParent<EnemyStatas>();
-        charController = GetComponent<CharacterController>();
-        sphereCollider = enemyAttack.GetComponent<SphereCollider>();
-        sphereCollider.enabled = false;
-
-        coroutine = enemyStatas.RedBlink();
-    }
     private void OnEnable()
     {
         _target = new TagetStatas();
-       // _target = pathfinding.PathFind(transform.position, 0.5f);
-        enemyState = EnemyState.Chase;       
+        SetEnemyAI();
+        _enemyAIState = EnemyAIState.Chase;
     }
     private void OnDisable()
     {
-        if (enemyState == EnemyState.Destoroy)
-        {
-            sphereCollider.enabled = false;
-            enemyState = EnemyState.Chase;
+        if (_enemyAIState == EnemyAIState.Attack)
+        { 
+            _enemyAIState = EnemyAIState.Chase;
         }
     }
+
+    void Start()
+    {     
+        _charController = GetComponent<CharacterController>();     
+        _coroutine = _enemyStatas.RedBlink();
+    }
+   
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!enemyStatas.IsDeath())
+        if (!_enemyStatas.IsDeath())
         {
-            TagetStatas target = pathfinding.PathFind(transform.position, charController.radius);
-            transform.LookAt(target.pos);
-            if(target.player)
+            SetTarget();          
+            if (_enemyAIState == EnemyAIState.Chase)
             {
-                _target = target;
+                Chase();
             }
-            else
+            if (_enemyAIState == EnemyAIState.Attack)
             {
-                if ((_target.pos - transform.position).magnitude < 0.1f)
+                if (!_target.player)
                 {
-
-                    _target = target;
+                    _enemyAIState = EnemyAIState.Chase;                 
+                }
+                _attackTime += Time.deltaTime;
+                if (_attackTime > _attackInterval)
+                {
+                    _attackTime = 0;
+                    switch (_enemyStatas.GetEnemyType())
+                    {
+                        case EnemyType.Destroy:
+                            Destroy();
+                            break;
+                        case EnemyType.Shoot:
+                            Shoot();
+                            break;
+                        case EnemyType.ClossRange:
+                            break;
+                        default:
+                            break;
+                    }
+                   
                 }
             }
-           
-          
-            if (enemyState == EnemyState.Chase)
-            {
-                move = transform.forward;
-                move.y += Physics.gravity.y * Time.deltaTime;
-                charController.Move(move * speed * Time.deltaTime);
-                if ((_target.pos - transform.position).magnitude <= attackDistanse && _target.player)
-                {
-                    enemyState = EnemyState.Destoroy;
-                    StartCoroutine(coroutine);
-                }
-            }
-            if (enemyState == EnemyState.Destoroy)
-            {
-                attackIntarval += Time.deltaTime;
-                if (attackIntarval > 2.0f)
-                {
-                    StartCoroutine(DelayDestroy(1));
-                    StopCoroutine(coroutine);
-                  //  sphereCollider.enabled = true;
-                    GameObject exp = (GameObject)Instantiate(detonator.gameObject, transform.position, Quaternion.identity);
-                }
-            }
-        }
-        
+        }        
     }
+
     IEnumerator DelayDestroy(int delayFrameCount)
     {
         for (var i = 0; i < delayFrameCount; i++)
@@ -109,8 +100,97 @@ public class EnemyAI : MonoBehaviour
             yield return null;
         }
         gameObject.SetActive(false);
-        attackIntarval = 0;
+        _attackTime = 0;
         yield break;
     }
-   
+
+    // Enemyのタイプからステータスをセットする
+    private void SetEnemyAI()
+    {
+        _enemyStatas.GetEnemyType();
+        switch (_enemyStatas.GetEnemyType())
+        {
+            case EnemyType.Destroy:
+                _sphereCollider = _enemyAttack.GetComponent<SphereCollider>();
+                _sphereCollider.enabled = false;
+                _attackInterval = 2.0f;
+                _attackDistanse = 3.0f;
+                _speed = 3.0f;
+                break;
+            case EnemyType.Shoot:
+                _lazerPointer = _enemyAttack.GetComponent<LineRenderer>();
+                _lazerPointer.enabled = false;
+                _enemyShooting = _enemyAttack.GetComponent<EnemyShooting>();
+                _attackInterval = 2.0f;
+                _attackDistanse = 10.0f;
+                _speed = 2.0f;
+                break;
+            case EnemyType.ClossRange:
+                _attackInterval = 1.0f;
+                _attackDistanse = 2.0f;
+                _speed = 4.0f;
+                break;
+            default:
+                break;
+        }
+    }
+
+    // ターゲット設定
+    private void SetTarget()
+    {
+        TagetStatas target = _pathfinding.PathFind(transform.position, _charController.radius);
+        transform.LookAt(target.pos);
+        _target.player = target.player;
+        if (target.player)
+        {
+            _target = target;
+        }
+        else
+        {
+            if ((_target.pos - transform.position).magnitude < 0.1f)
+            {
+
+                _target = target;
+            }
+        }
+    }
+
+    // 追跡
+    private void Chase()
+    {
+        _move = transform.forward;
+        _move.y += Physics.gravity.y * Time.deltaTime;
+        _charController.Move(_move * _speed * Time.deltaTime);
+        if ((_target.pos - transform.position).magnitude <= _attackDistanse && _target.player)
+        {
+            _enemyAIState = EnemyAIState.Attack;
+            StartCoroutine(_coroutine); // 予備動作赤く点滅
+        }
+    }
+
+    // 自爆
+    private void Destroy()
+    {
+        StartCoroutine(DelayDestroy(1));
+        StopCoroutine(_coroutine);
+        GameObject exp = (GameObject)Instantiate(_detonator.gameObject, transform.position, Quaternion.identity);       
+    }
+    // 射撃
+    private void Shoot()
+    {
+        _lazerPointer.enabled = true;
+       // StopCoroutine(_coroutine);
+        StartCoroutine(BlinkLayzerPointer(1));
+        _enemyShooting.Shoot();
+    }
+    IEnumerator BlinkLayzerPointer(int delayFrameCount)
+    {
+        for (var i = 0; i < delayFrameCount; i++)
+        {
+            yield return null;
+        }
+        _lazerPointer.enabled = false;
+        yield break;
+    }
+
 }

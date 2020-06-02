@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EnemyType
+{
+    Destroy,    // 自爆
+    Shoot,      // 射撃
+    ClossRange  // 近接攻撃
+}
+
 public class EnemyStatas : MonoBehaviour
 {
     public GameObject detonator;        // 爆発プレハブ
@@ -9,10 +16,13 @@ public class EnemyStatas : MonoBehaviour
     private Animator animator;
     private bool death;
     [SerializeField]
-    private float hitPoint = 100.0f;
+    private float hitPoint;
+    [SerializeField]
     private int score = 50;     // 敵の強さで変わる
     private Renderer _renderer;
     private Color masterColor;
+    [SerializeField]
+    private EnemyType _enemyType;
 
     private void Awake()
     {
@@ -24,7 +34,7 @@ public class EnemyStatas : MonoBehaviour
     private void Start()
     {
         death = false;
-        gameController = GameObject.Find("GameController");
+        gameController = GameObject.FindGameObjectWithTag("GameController");
        
     }
     private void OnEnable()
@@ -46,7 +56,10 @@ public class EnemyStatas : MonoBehaviour
         }
         if(death)
         {
-            animator.SetBool("Destroy", true);
+            if (animator != null)
+            {
+                animator.SetBool("Destroy", true);
+            }
             gameController.GetComponent<GameController>().AddScore(score);
             GameObject exp = (GameObject)Instantiate(detonator.gameObject, transform.position, Quaternion.identity);
             
@@ -74,5 +87,9 @@ public class EnemyStatas : MonoBehaviour
             _renderer.material.color = masterColor;
             yield return new WaitForSeconds(0.1f);
         }
+    }
+    public EnemyType GetEnemyType()
+    {
+        return _enemyType;
     }
 }

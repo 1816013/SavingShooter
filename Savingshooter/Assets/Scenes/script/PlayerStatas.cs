@@ -9,6 +9,7 @@ public class PlayerStatas : MonoBehaviour
     private float playerEnergy = 20.0f; // エネルギー
     private float playerPower = 0.5f;  // 出力
     private float powerCost;            // エネルギー消費の係数
+    private bool death;
 
     private void Start()
     {
@@ -40,6 +41,7 @@ public class PlayerStatas : MonoBehaviour
     
         if(playerEnergy <= 0)
         {
+            death = true;
             animator.SetBool("Die", true);
             Invoke("DieCall", 2.0f);
         }
@@ -59,5 +61,9 @@ public class PlayerStatas : MonoBehaviour
     private void DieCall()
     {
         gameController.GetComponent<GameController>().ChangeScene();
+    }
+    public bool IsDeath()
+    {
+        return death;
     }
 }

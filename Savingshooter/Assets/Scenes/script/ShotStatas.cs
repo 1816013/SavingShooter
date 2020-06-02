@@ -11,13 +11,13 @@ public class ShotStatas : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
         playerStatas = player.GetComponent<PlayerStatas>();
         shotPower = playerStatas.GetPlayerPower() * 100.0f;
     }
     private void OnEnable()
     {
-        StartCoroutine(DelayObject(3.0f));
+        StartCoroutine(DelayDestroyBullet(3.0f));
     }
 
     private void OnTriggerEnter(Collider other)
@@ -31,9 +31,9 @@ public class ShotStatas : MonoBehaviour
 
     private void DestroyBullet()
     {
-        this.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
-    IEnumerator DelayObject(float time)
+    IEnumerator DelayDestroyBullet(float time)
     {
         yield return new WaitForSeconds(time);
         gameObject.SetActive(false);

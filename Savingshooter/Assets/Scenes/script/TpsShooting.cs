@@ -10,12 +10,13 @@ public class TpsShooting : MonoBehaviour
     private ObjectPooling _pool;
     private GameObject player;
     private PlayerStatas playerStatas;
+    private Shoot _shoot;
     public int maxAmmo = 50;
     private int nowAmmo;
-    private float shotInterval = 0.0f;
+    private float shotTime = 0.0f;
     private bool shotF = false;
     private bool reloading = false;
-    private float reloadInterval = 0.0f;
+    private float reloadTime = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +25,7 @@ public class TpsShooting : MonoBehaviour
         playerStatas = player.GetComponent<PlayerStatas>();
         animator = player.GetComponentInChildren<Animator>();
         nowAmmo = maxAmmo;
+        _shoot = gameController.GetComponent<Shoot>();
         _pool = gameController.GetComponent<ObjectPooling>();
         _pool.CreatePool(bulletPrefab, maxAmmo, bulletPrefab.GetInstanceID(), Vector3.zero);
     }
@@ -36,8 +38,8 @@ public class TpsShooting : MonoBehaviour
             if (Input.GetKey(KeyCode.Mouse0))
             {
                 animator.SetBool("shotF", true);
-                shotInterval += 1;
-                if (shotInterval % 5 == 0 && nowAmmo > 0)
+                shotTime += 1;
+                if (shotTime % 5 == 0 && nowAmmo > 0)
                 {
                     shotF = true;
                 }
@@ -57,9 +59,9 @@ public class TpsShooting : MonoBehaviour
         }
         else
         {
-            reloadInterval += Time.deltaTime;
+            reloadTime += Time.deltaTime;
         }
-        if(reloadInterval > 1)
+        if(reloadTime > 1)
         {
             reloading = false;
             animator.SetBool("Reload", false);
@@ -68,15 +70,10 @@ public class TpsShooting : MonoBehaviour
     private void FixedUpdate()
     {
         if (shotF)
-        {
-            
+        {            
             nowAmmo -= 1;
+            _shoot.Shooting(ref _pool, bulletPrefab, transform, 3000);
             //Instantiate(bulletPrefab, transform.position, Quaternion.Euler(transform.parent.eulerAngles.x, transform.parent.eulerAngles.y, 0))
-            GameObject bullet = _pool.GetPoolObj(bulletPrefab.GetInstanceID(), transform.position);
-            bullet.transform.rotation = Quaternion.Euler(transform.parent.eulerAngles.x, transform.parent.eulerAngles.y, 0);
-            Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
-            bulletRb.velocity = Vector3.zero;
-            bulletRb.AddForce(transform.forward * 5000);
             shotF = false;
             
         }
@@ -86,7 +83,7 @@ public class TpsShooting : MonoBehaviour
     {
         if (nowAmmo != maxAmmo)
         {          
-            reloadInterval = 0;
+            reloadTime = 0;
             animator.SetBool("shotF", false);
             animator.SetBool("Reload", true);
             playerStatas.AddPlayerEnergy(-5);

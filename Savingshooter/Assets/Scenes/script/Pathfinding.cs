@@ -165,7 +165,7 @@ public class Pathfinding : MonoBehaviour
         _targetList.Add(target4);
 
 
-        // 四つの点を外側にずらす(一回だけ読む)
+        // 四つの点を外側にずらす
         for (int i = 0; i < _targetList.Count; i++)
         {
             Vector3 tmp = _targetList[i];

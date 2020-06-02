@@ -12,6 +12,7 @@ TagManager:
   - Item
   - terrian
   - Collision
+  - enemyShot
   layers:
   - Default
   - TransparentFX
