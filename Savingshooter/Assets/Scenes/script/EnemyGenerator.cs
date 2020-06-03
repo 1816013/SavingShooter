@@ -5,7 +5,9 @@ using UnityEngine;
 public class EnemyGenerator : MonoBehaviour
 {
     //敵プレハブ
-    public GameObject enemyPrefab;
+    public GameObject DestroyEnemy;
+    public GameObject ShootingEnemy;
+//    public GameObject DestroyEnemy;
 
     private ObjectPooling _pool;
     
@@ -22,15 +24,25 @@ public class EnemyGenerator : MonoBehaviour
     private float minDistance = 30;
     private float maxDistance = 35;
 
+    private List<GameObject> _enemyPrefabList;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        _enemyPrefabList = new List<GameObject>();
+        _enemyPrefabList.Add(DestroyEnemy);   // 要素0
+        _enemyPrefabList.Add(ShootingEnemy);  // 要素1
+       // _enemyTypeList.Add(EnemyType);
+        //int random = Random.Range((int)EnemyType.Destroy, (int)EnemyType.Shoot);
         //時間間隔を決定する
         interval = GetRandomF(minTime, maxTime);
         _pool = gameObject.GetComponent<ObjectPooling>();
         // エネミーは作られた瞬間にレイキャストする関係上座標入力が必要
-        _pool.CreatePool(enemyPrefab, 10, enemyPrefab.GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
+        for (int i = 0; i < (int)EnemyType.Shoot + 1; i++)
+        {
+            _pool.CreatePool(_enemyPrefabList[i], 5, _enemyPrefabList[i].GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
+        }
     }
 
     // Update is called once per frame
@@ -40,12 +52,12 @@ public class EnemyGenerator : MonoBehaviour
 
         if (time > interval)
         {
-            _pool.GetPoolObj(enemyPrefab.GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
-            _pool.GetPoolObj(enemyPrefab.GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
-            _pool.GetPoolObj(enemyPrefab.GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
-            _pool.GetPoolObj(enemyPrefab.GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
-            _pool.GetPoolObj(enemyPrefab.GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
-            _pool.GetPoolObj(enemyPrefab.GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
+            for (int i = 0; i < 5; i++)
+            {
+                int random = Random.Range((int)EnemyType.Destroy, (int)EnemyType.Shoot + 1);
+                _pool.GetPoolObj(_enemyPrefabList[random].GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
+            }
+
             time = 0f;
             interval = GetRandomF(minTime,maxTime);
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
-    enum EnemyAIState
+    private enum EnemyAIState
     {
         Chase,
         Attack
@@ -59,6 +59,9 @@ public class EnemyAI : MonoBehaviour
     {
         if (!_enemyStatas.IsDeath())
         {
+            Vector3 gravity = Vector3.zero;
+            gravity.y += Physics.gravity.y * Time.deltaTime;
+            _charController.Move(gravity * _speed * Time.deltaTime);
             SetTarget();          
             if (_enemyAIState == EnemyAIState.Chase)
             {
@@ -159,7 +162,7 @@ public class EnemyAI : MonoBehaviour
     private void Chase()
     {
         _move = transform.forward;
-        _move.y += Physics.gravity.y * Time.deltaTime;
+       // _move.y += Physics.gravity.y * Time.deltaTime;
         _charController.Move(_move * _speed * Time.deltaTime);
         if ((_target.pos - transform.position).magnitude <= _attackDistanse && _target.player)
         {

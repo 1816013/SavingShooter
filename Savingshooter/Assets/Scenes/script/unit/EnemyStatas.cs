@@ -6,7 +6,8 @@ public enum EnemyType
 {
     Destroy,    // 自爆
     Shoot,      // 射撃
-    ClossRange  // 近接攻撃
+    ClossRange,  // 近接攻撃
+    Max
 }
 
 public class EnemyStatas : MonoBehaviour

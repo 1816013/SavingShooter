@@ -17,5 +17,10 @@ public class EnemyattackHit : MonoBehaviour
             damageUI.DamageEffect();
             gameObject.GetComponent<PlayerStatas>().AddPlayerEnergy(-20);
         }
+        if (other.tag == "enemyShot")
+        {
+            damageUI.DamageEffect();
+            gameObject.GetComponent<PlayerStatas>().AddPlayerEnergy(-20);
+        }
     }
 }

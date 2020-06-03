@@ -17,7 +17,7 @@ public class ShotStatas : MonoBehaviour
     }
     private void OnEnable()
     {
-        StartCoroutine(DelayDestroyBullet(3.0f));
+        StartCoroutine(DelayDestroyBullet(1.0f));
     }
 
     private void OnTriggerEnter(Collider other)
