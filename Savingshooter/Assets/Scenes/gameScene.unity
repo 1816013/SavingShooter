@@ -17184,7 +17184,7 @@ Transform:
   m_GameObject: {fileID: 1047793818}
   m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children:
   - {fileID: 1670558211}
   - {fileID: 1954766955}
@@ -28670,6 +28670,8 @@ MonoBehaviour:
   DestroyEnemy: {fileID: 952804616672127951, guid: f2f56deca1d61c1488632510112e5793,
     type: 3}
   ShootingEnemy: {fileID: 82858451938241208, guid: 62d70b4237e47f84d9343deb86bb8c49,
+    type: 3}
+  ClossRangeEnemy: {fileID: 7045874417755940184, guid: 3d45a70ce751b7642a6dcf8b80bce6ca,
     type: 3}
   minTime: 2
   maxTime: 5

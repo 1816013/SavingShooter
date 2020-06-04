@@ -7,7 +7,7 @@ public class EnemyGenerator : MonoBehaviour
     //敵プレハブ
     public GameObject DestroyEnemy;
     public GameObject ShootingEnemy;
-//    public GameObject DestroyEnemy;
+    public GameObject ClossRangeEnemy;
 
     private ObjectPooling _pool;
     
@@ -33,13 +33,12 @@ public class EnemyGenerator : MonoBehaviour
         _enemyPrefabList = new List<GameObject>();
         _enemyPrefabList.Add(DestroyEnemy);   // 要素0
         _enemyPrefabList.Add(ShootingEnemy);  // 要素1
-       // _enemyTypeList.Add(EnemyType);
-        //int random = Random.Range((int)EnemyType.Destroy, (int)EnemyType.Shoot);
+        _enemyPrefabList.Add(ClossRangeEnemy);
         //時間間隔を決定する
         interval = GetRandomF(minTime, maxTime);
         _pool = gameObject.GetComponent<ObjectPooling>();
         // エネミーは作られた瞬間にレイキャストする関係上座標入力が必要
-        for (int i = 0; i < (int)EnemyType.Shoot + 1; i++)
+        for (int i = 0; i < (int)EnemyType.Max; i++)
         {
             _pool.CreatePool(_enemyPrefabList[i], 5, _enemyPrefabList[i].GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
         }
@@ -54,7 +53,7 @@ public class EnemyGenerator : MonoBehaviour
         {
             for (int i = 0; i < 5; i++)
             {
-                int random = Random.Range((int)EnemyType.Destroy, (int)EnemyType.Shoot + 1);
+                int random = Random.Range((int)EnemyType.Destroy, (int)EnemyType.Max);
                 _pool.GetPoolObj(_enemyPrefabList[random].GetInstanceID(), GetRandomVec(minVec, maxVec).normalized * GetRandomF(minDistance, maxDistance));
             }
 

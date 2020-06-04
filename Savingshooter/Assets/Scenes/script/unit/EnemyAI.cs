@@ -14,6 +14,7 @@ public class EnemyAI : MonoBehaviour
     private EnemyStatas _enemyStatas;     // エネミーのステータス
     private EnemyAIState _enemyAIState;      // エネミーのAI
     private EnemyShooting _enemyShooting;
+    private Animator _animator;
     private CharacterController _charController; // キャラのコントローラー
     private float _attackDistanse;    // 攻撃距離
     private Vector3 _move;                   // 移動ベクトル
@@ -29,6 +30,7 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
+        _animator = transform.GetComponentInChildren<Animator>();
         _pathfinding = gameObject.GetComponent<Pathfinding>();
         _enemyStatas = transform.GetComponentInParent<EnemyStatas>();      
     }
@@ -61,7 +63,7 @@ public class EnemyAI : MonoBehaviour
         {
             Vector3 gravity = Vector3.zero;
             gravity.y += Physics.gravity.y * Time.deltaTime;
-            _charController.Move(gravity * _speed * Time.deltaTime);
+            _charController.Move(gravity);
             SetTarget();          
             if (_enemyAIState == EnemyAIState.Chase)
             {
@@ -69,9 +71,21 @@ public class EnemyAI : MonoBehaviour
             }
             if (_enemyAIState == EnemyAIState.Attack)
             {
-                if (!_target.player)
+                if (!_target.player || (_target.pos - transform.position).magnitude > _attackDistanse )
                 {
                     _enemyAIState = EnemyAIState.Chase;                 
+                }
+                if (_attackTime == 0)
+                {
+                    // ここは予備動作
+                    if (_enemyStatas.GetEnemyType() == EnemyType.ClossRange)
+                    {
+                        _animator.SetBool("Attack", true);
+                    }
+                    if (_enemyStatas.GetEnemyType() == EnemyType.Destroy)
+                    {
+                        StartCoroutine(_coroutine); // 予備動作赤く点滅
+                    }
                 }
                 _attackTime += Time.deltaTime;
                 if (_attackTime > _attackInterval)
@@ -86,6 +100,7 @@ public class EnemyAI : MonoBehaviour
                             Shoot();
                             break;
                         case EnemyType.ClossRange:
+                            ClossRangeAttack();
                             break;
                         default:
                             break;
@@ -96,17 +111,7 @@ public class EnemyAI : MonoBehaviour
         }        
     }
 
-    IEnumerator DelayDestroy(int delayFrameCount)
-    {
-        for (var i = 0; i < delayFrameCount; i++)
-        {
-            yield return null;
-        }
-        gameObject.SetActive(false);
-        _attackTime = 0;
-        yield break;
-    }
-
+    
     // Enemyのタイプからステータスをセットする
     private void SetEnemyAI()
     {
@@ -129,8 +134,10 @@ public class EnemyAI : MonoBehaviour
                 _speed = 2.0f;
                 break;
             case EnemyType.ClossRange:
+                _sphereCollider = _enemyAttack.GetComponent<SphereCollider>();
+                _sphereCollider.enabled = false;
                 _attackInterval = 1.0f;
-                _attackDistanse = 2.0f;
+                _attackDistanse = 2f;
                 _speed = 4.0f;
                 break;
             default:
@@ -167,13 +174,15 @@ public class EnemyAI : MonoBehaviour
         if ((_target.pos - transform.position).magnitude <= _attackDistanse && _target.player)
         {
             _enemyAIState = EnemyAIState.Attack;
-            StartCoroutine(_coroutine); // 予備動作赤く点滅
+
+            
         }
     }
 
     // 自爆
     private void Destroy()
     {
+        _sphereCollider.enabled = true;
         StartCoroutine(DelayDestroy(1));
         StopCoroutine(_coroutine);
         GameObject exp = (GameObject)Instantiate(_detonator.gameObject, transform.position, Quaternion.identity);       
@@ -186,6 +195,15 @@ public class EnemyAI : MonoBehaviour
         StartCoroutine(BlinkLayzerPointer(1));
         _enemyShooting.Shoot();
     }
+
+    // 近距離攻撃
+    private void ClossRangeAttack()
+    {
+       
+        AttackEnd(1);
+        _sphereCollider.enabled = true;
+    }
+
     IEnumerator BlinkLayzerPointer(int delayFrameCount)
     {
         for (var i = 0; i < delayFrameCount; i++)
@@ -193,6 +211,29 @@ public class EnemyAI : MonoBehaviour
             yield return null;
         }
         _lazerPointer.enabled = false;
+        yield break;
+    }
+
+    IEnumerator DelayDestroy(int delayFrameCount)
+    {
+        for (var i = 0; i < delayFrameCount; i++)
+        {
+            yield return null;
+        }
+        gameObject.SetActive(false);
+        _attackTime = 0;
+        yield break;
+    }
+
+
+    IEnumerator AttackEnd(int delayFrameCount)
+    {
+        for (var i = 0; i < delayFrameCount; i++)
+        {
+            yield return null;
+        }
+        _animator.SetBool("Attack", false);
+        _sphereCollider.enabled = false;
         yield break;
     }
 
