@@ -5,7 +5,7 @@ using UnityEngine;
 public class FpsController : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _fpsCamera;
+    private GameObject _fpsCamera = null;
     //キャラクターコントローラー
     private CharacterController _charController;
     //　キャラクターの速度

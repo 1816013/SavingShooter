@@ -5,13 +5,15 @@ using UnityEngine.UI;
 
 public class PlayerPower : MonoBehaviour
 {
-    public GameObject textobj;
-    public GameObject player;
-    // Update is called once per frame
+    [SerializeField]
+    private GameObject _textobj = null;
+    [SerializeField]
+    private GameObject _player = null;
+
     void FixedUpdate()
     {
-        Text popText = textobj.GetComponent<Text>();
-        float power = player.GetComponent<PlayerStatas>().GetPlayerPower();
+        Text popText = _textobj.GetComponent<Text>();
+        float power = _player.GetComponent<PlayerStatas>().GetPlayerPower();
         power *= 100;
         popText.text = "Power" + power.ToString() + "%";
     }

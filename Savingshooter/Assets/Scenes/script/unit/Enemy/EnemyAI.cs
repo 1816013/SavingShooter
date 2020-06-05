@@ -9,8 +9,10 @@ public class EnemyAI : MonoBehaviour
         Chase,
         Attack
     }
-    public GameObject _detonator;        // 爆発プレハブ
-    public GameObject _enemyAttack;      // 敵が攻撃する場所    
+    [SerializeField]
+    private GameObject _detonator = null;        // 爆発プレハブ
+    [SerializeField]
+    private GameObject _enemyAttack = null;      // 敵が攻撃する場所    
     private EnemyStatas _enemyStatas;     // エネミーのステータス
     private EnemyAIState _enemyAIState;      // エネミーのAI
     private EnemyShooting _enemyShooting;
@@ -71,7 +73,7 @@ public class EnemyAI : MonoBehaviour
             }
             if (_enemyAIState == EnemyAIState.Attack)
             {
-                if (!_target.player || (_target.pos - transform.position).magnitude > _attackDistanse )
+                if (!_target._player || (_target._pos - transform.position).magnitude > _attackDistanse )
                 {
                     _enemyAIState = EnemyAIState.Chase;                 
                 }
@@ -149,15 +151,15 @@ public class EnemyAI : MonoBehaviour
     private void SetTarget()
     {
         TagetStatas target = _pathfinding.PathFind(transform.position, _charController.radius);
-        transform.LookAt(target.pos);
-        _target.player = target.player;
-        if (target.player)
+        transform.LookAt(target._pos);
+        _target._player = target._player;
+        if (target._player)
         {
             _target = target;
         }
         else
         {
-            if ((_target.pos - transform.position).magnitude < 0.1f)
+            if ((_target._pos - transform.position).magnitude < 0.1f)
             {
 
                 _target = target;
@@ -171,7 +173,7 @@ public class EnemyAI : MonoBehaviour
         _move = transform.forward;
        // _move.y += Physics.gravity.y * Time.deltaTime;
         _charController.Move(_move * _speed * Time.deltaTime);
-        if ((_target.pos - transform.position).magnitude <= _attackDistanse && _target.player)
+        if ((_target._pos - transform.position).magnitude <= _attackDistanse && _target._player)
         {
             _enemyAIState = EnemyAIState.Attack;
 

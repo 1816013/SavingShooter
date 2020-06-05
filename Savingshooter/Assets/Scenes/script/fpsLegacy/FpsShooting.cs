@@ -5,9 +5,9 @@ using UnityEngine;
 public class FpsShooting : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _bulletPrefab;
+    private GameObject _bulletPrefab = null;
     [SerializeField]
-    private GameObject _fpsCamera;
+    private GameObject _fpsCamera = null;
     private GameObject player;
     public int maxAmmo = 50;
     private int nowAmmo;

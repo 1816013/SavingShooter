@@ -5,25 +5,25 @@ using UnityEngine.UI;
 
 public class DamageUI : MonoBehaviour
 {
-    Image img;
+    private Image _image;
 
     void Start()
     {
-        img = GetComponent<Image>();
-        img.color = Color.clear;
+        _image = GetComponent<Image>();
+        _image.color = Color.clear;
     }
 
     void Update()
     {
-        if (img.color != Color.clear)
+        if (_image.color != Color.clear)
         {
-            img.color = Color.Lerp(this.img.color, Color.clear, Time.deltaTime);
+            _image.color = Color.Lerp(_image.color, Color.clear, Time.deltaTime);
         }
         
     }
 
     public void DamageEffect()
     {
-        img.color = new Color(0.5f, 0f, 0f, 0.5f);
+        _image.color = new Color(0.5f, 0f, 0f, 0.5f);
     }
 }

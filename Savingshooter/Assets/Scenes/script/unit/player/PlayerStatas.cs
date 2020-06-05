@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class PlayerStatas : MonoBehaviour
 {
-    public GameController gameController;
-    private Animator animator;
-    private float playerEnergy = 20.0f; // エネルギー
-    private float playerPower = 0.5f;  // 出力
-    private float powerCost;            // エネルギー消費の係数
-    private bool death;
+    [SerializeField]
+    private GameController _gameController = null;
+    private Animator _animator;
+    private float _playerEnergy = 200.0f; // エネルギー
+    private float _playerPower = 0.5f;  // 出力
+    private float _powerCost;            // エネルギー消費の係数
+    private bool _death;
 
     private void Start()
     {
-        animator = gameObject.GetComponentInChildren<Animator>();
+        _animator = gameObject.GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -21,49 +22,49 @@ public class PlayerStatas : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.LeftShift))
         {
-            playerPower += 0.01f;
+            _playerPower += 0.01f;
         }
         if (Input.GetKey(KeyCode.LeftControl))
         {
-            playerPower -= 0.01f;
+            _playerPower -= 0.01f;
         }
-        playerPower = Mathf.Clamp(playerPower, 0.1f, 1.0f); // 最大値1最小値0.1
+        _playerPower = Mathf.Clamp(_playerPower, 0.1f, 1.0f); // 最大値1最小値0.1
 
-        if (playerPower > 0.5)
+        if (_playerPower > 0.5)
         {
-            powerCost = (playerPower - 0.5f) * 4 + 1.0f;    // 最大値1の時　3
+            _powerCost = (_playerPower - 0.5f) * 4 + 1.0f;    // 最大値1の時　3
         }
         else
         {
-            powerCost = playerPower * 2;     // 最低値  0.1の時 0.2 : 0.5の時  1
+            _powerCost = _playerPower * 2;     // 最低値  0.1の時 0.2 : 0.5の時  1
         }
-       // playerEnergy -= Time.deltaTime * powerCost * 3;
+        _playerEnergy -= Time.deltaTime * _powerCost * 3;
     
-        if(playerEnergy <= 0)
+        if(_playerEnergy <= 0)
         {
-            death = true;
-            animator.SetBool("Die", true);
+            _death = true;
+            _animator.SetBool("Die", true);
             Invoke("DieCall", 2.0f);
         }
     }
     public float GetPlayerPower()
     {
-        return playerPower;
+        return _playerPower;
     }
     public float GetPlayerEnergy()
     {
-        return playerEnergy;
+        return _playerEnergy;
     }
     public void AddPlayerEnergy(float add)
     {
-        playerEnergy += add;
+        _playerEnergy += add;
     }
     private void DieCall()
     {
-        gameController.GetComponent<GameController>().ChangeScene();
+        _gameController.GetComponent<GameController>().ChangeScene();
     }
     public bool IsDeath()
     {
-        return death;
+        return _death;
     }
 }

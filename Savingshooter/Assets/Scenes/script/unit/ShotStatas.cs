@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class ShotStatas : MonoBehaviour
 {
-    private GameObject player;
-    private PlayerStatas playerStatas;
+    private GameObject _player;
+    private PlayerStatas _playerStatas;
 
-    private float shotPower;
+    private float _shotPower;
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerStatas = player.GetComponent<PlayerStatas>();
-        shotPower = playerStatas.GetPlayerPower() * 100.0f;
+        _player = GameObject.FindGameObjectWithTag("Player");
+        _playerStatas = _player.GetComponent<PlayerStatas>();
+        _shotPower = _playerStatas.GetPlayerPower() * 100.0f;
     }
     private void OnEnable()
     {
@@ -41,6 +41,6 @@ public class ShotStatas : MonoBehaviour
 
     public float GetShotPower()
     {
-        return shotPower;
+        return _shotPower;
     }
 }

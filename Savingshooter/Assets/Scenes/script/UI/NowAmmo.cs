@@ -5,13 +5,15 @@ using UnityEngine.UI;
 
 public class NowAmmo : MonoBehaviour
 {
-    public GameObject textobj;
-    public GameObject shooting;
-    // Update is called once per frame
+    [SerializeField]
+    private GameObject _textobj = null;
+    [SerializeField]
+    private GameObject _shooting = null;
+
     void FixedUpdate()
     {
-        Text popText = textobj.GetComponent<Text>();
-        int nowAmmo = shooting.GetComponent<TpsShooting>().GetNowAmmo();
+        Text popText = _textobj.GetComponent<Text>();
+        int nowAmmo = _shooting.GetComponent<TpsShooting>().GetNowAmmo();
         popText.text = "Ammo " + nowAmmo.ToString();
     }
 }

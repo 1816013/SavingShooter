@@ -10,7 +10,7 @@ public enum ItemType    // アイテムが増えたときの生成時用
 public class itemStatas : MonoBehaviour
 {
     [SerializeField]
-    private ItemType _itemType;
+    private ItemType _itemType = new ItemType();
     [SerializeField]
     private float _destroyTime = 10.0f;
 

@@ -12,72 +12,92 @@ public enum EnemyType
 
 public class EnemyStatas : MonoBehaviour
 {
-    public GameObject detonator;        // 爆発プレハブ
-    private GameObject gameController;
-    private Animator animator;
-    private bool death;
     [SerializeField]
-    private float hitPoint;
+    private GameObject _detonator = null;        // 爆発プレハブ
     [SerializeField]
-    private int score = 50;     // 敵の強さで変わる
+    private float _hitPoint = 100.0f;
+    [SerializeField]
+    private int _score;     // 敵の強さで変わる
+    private GameObject _gameController;
+    private Animator _animator;
+    private bool _death;
     private Renderer _renderer;
-    private Color masterColor;
+    private Color _masterColor;
     [SerializeField]
     private EnemyType _enemyType;
 
     private void Awake()
     {
-        animator = transform.GetComponentInChildren<Animator>();
+        _animator = transform.GetComponentInChildren<Animator>();
         _renderer = gameObject.GetComponentInChildren<Renderer>();
-        masterColor = _renderer.material.color;
+        _masterColor = _renderer.material.color;
     }
 
     private void Start()
     {
-        death = false;
-        gameController = GameObject.FindGameObjectWithTag("GameController");
+        _death = false;
+        _gameController = GameObject.FindGameObjectWithTag("GameController");
        
     }
     private void OnEnable()
     {
-        hitPoint = 100.0f;
-        death = false;
+        switch (_enemyType)
+        {
+            case EnemyType.Destroy:
+                _hitPoint = 200.0f;
+                _score = 50;
+                break;
+            case EnemyType.Shoot:
+                _hitPoint = 300.0f;
+                _score = 100;
+                break;
+            case EnemyType.ClossRange:
+                _hitPoint = 100.0f;
+                _score = 50;
+                break;
+            case EnemyType.Max:
+                break;
+            default:
+                break;
+        }
+        
+        _death = false;
     }
     private void OnDisable()
     {
-        _renderer.material.color = masterColor;
+        _renderer.material.color = _masterColor;
     }
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(hitPoint <= 0 && !death)
+        if(_hitPoint <= 0 && !_death)
         {
-            death = true;
+            _death = true;
            
         }
-        if(death)
+        if(_death)
         {
-            if (animator != null)
+            if (_animator != null)
             {
-                animator.SetBool("Destroy", true);
+                _animator.SetBool("Destroy", true);
             }
-            gameController.GetComponent<GameController>().AddScore(score);
-            GameObject exp = (GameObject)Instantiate(detonator.gameObject, transform.position, Quaternion.identity);
+            _gameController.GetComponent<GameController>().AddScore(_score);
+            GameObject exp = (GameObject)Instantiate(_detonator.gameObject, transform.position, Quaternion.identity);
             
             gameObject.SetActive(false);
         }
     }
     public void Damage(float damage)
     {
-        hitPoint -= damage;
+        _hitPoint -= damage;
     }
     public bool IsDeath()
     {
-        return death;
+        return _death;
     }
     public void SetDeath(bool flag)
     {
-         death = flag;
+         _death = flag;
     }
     public IEnumerator RedBlink()
     {
@@ -85,7 +105,7 @@ public class EnemyStatas : MonoBehaviour
         {
             _renderer.material.color = Color.red;
             yield return new WaitForSeconds(0.1f);
-            _renderer.material.color = masterColor;
+            _renderer.material.color = _masterColor;
             yield return new WaitForSeconds(0.1f);
         }
     }

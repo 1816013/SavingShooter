@@ -4,39 +4,39 @@ using UnityEngine;
 
 public class TpsController : MonoBehaviour
 {
-    
-    public Camera tpsCamera;
+    [SerializeField]
+    private Camera _tpsCamera = null;
     private PlayerStatas _playerStatas;
     //キャラクターコントローラー
-    private CharacterController charController;
+    private CharacterController _charController;
     //　キャラクターの速度
-    private Vector3 move;
+    private Vector3 _move;
     [SerializeField]
-    private float speed = 5.0f;
-    Plane plane = new Plane();
-    float distance = 0.0f;
-    Vector3 planeOffset;
-    private Animator animator;
+    private float _speed = 5.0f;
+    Plane _plane = new Plane();
+    private float _distance = 0.0f;
+    Vector3 _planeOffset;
+    private Animator _animator;
 
     void Start()
     {
         _playerStatas = GetComponent<PlayerStatas>();
         //キャラクターコントローラの取得
-        charController = GetComponent<CharacterController>();
-        animator =  transform.GetComponentInChildren<Animator>();
-        planeOffset = new Vector3(0, 1.5f, 0);
+        _charController = GetComponent<CharacterController>();
+        _animator =  transform.GetComponentInChildren<Animator>();
+        _planeOffset = new Vector3(0, 1.5f, 0);
     }
 
     private void Update()
     {
         //　キャラクターコントローラのコライダが地面と接触してるかどうか
-        if (charController.isGrounded)
+        if (_charController.isGrounded)
         {
-            move.x = Input.GetAxis("Horizontal");
-            move.z = Input.GetAxis("Vertical");
-            Vector3 dir = (-transform.right * move.x + transform.forward * move.z).normalized;
-            animator.SetFloat("X", dir.x);
-            animator.SetFloat("Y", dir.z);
+            _move.x = Input.GetAxis("Horizontal");
+            _move.z = Input.GetAxis("Vertical");
+            Vector3 dir = (-transform.right * _move.x + transform.forward * _move.z).normalized;
+            _animator.SetFloat("X", dir.x);
+            _animator.SetFloat("Y", dir.z);
         }
     }
 
@@ -45,21 +45,21 @@ public class TpsController : MonoBehaviour
         if (!_playerStatas.IsDeath())
         {
             // カメラからマウスの場所までののレイ(0.25はプレイヤーの銃が中心からずれているから調整のため)
-            var ray = tpsCamera.ScreenPointToRay(Input.mousePosition + new Vector3(0.25f, 0));
+            var ray = _tpsCamera.ScreenPointToRay(Input.mousePosition + new Vector3(0.25f, 0));
 
             // プレイヤーの高さにPlaneを更新して、カメラの情報を元に地面判定して距離を取得
-            plane.SetNormalAndPosition(Vector3.up, transform.localPosition);
-            if (plane.Raycast(ray, out distance))
+            _plane.SetNormalAndPosition(Vector3.up, transform.localPosition);
+            if (_plane.Raycast(ray, out _distance))
             {
                 // 距離を元に交点を算出して、交点の方を向く
-                var lookPoint = ray.GetPoint(distance);
-                Debug.DrawRay(ray.origin, ray.direction * distance, Color.blue);
+                var lookPoint = ray.GetPoint(_distance);
+                Debug.DrawRay(ray.origin, ray.direction * _distance, Color.blue);
                 transform.LookAt(lookPoint);
             }
             //　重力値を計算
-            move.y += Physics.gravity.y * Time.deltaTime;
+            _move.y += Physics.gravity.y * Time.deltaTime;
             //　キャラクターコントローラのMoveを使ってキャラクターを移動させる
-            charController.Move(move * speed * Time.deltaTime);
+            _charController.Move(_move * _speed * Time.deltaTime);
         }
     }
 }

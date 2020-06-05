@@ -5,22 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    static public int score = 0;
+    static public int _score = 0;
     [SerializeField]
-    private GameObject pauseUI = null;
+    private GameObject _pauseUI = null;
    
 
     private void Start()
     {
-        score = 0;
+        _score = 0;
     }
     // Update is called once per frame
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            pauseUI.SetActive(!pauseUI.activeSelf);
-            if(pauseUI.activeSelf)
+            _pauseUI.SetActive(!_pauseUI.activeSelf);
+            if(_pauseUI.activeSelf)
             {
                 Time.timeScale = 0;
             }
@@ -38,11 +38,11 @@ public class GameController : MonoBehaviour
 
     public int GetScore()
     {
-        return score;
+        return _score;
     }
 
     public void AddScore(int add)
     {
-        score += add;
+        _score += add;
     }
 }

@@ -4,97 +4,100 @@ using UnityEngine;
 
 public class TpsShooting : MonoBehaviour
 {
-    private Animator animator;
-    public GameObject bulletPrefab;
-    public GameObject gameController;
+    [SerializeField]
+    private GameObject _bulletPrefab = null;
+    [SerializeField]
+    private GameObject _gameController = null;
+    [SerializeField]
+    private int _maxAmmo = 50;
+    private Animator _animator; 
     private ObjectPooling _pool;
-    private GameObject player;
-    private PlayerStatas playerStatas;
-    private Shoot _shoot;
-    public int maxAmmo = 50;
-    private int nowAmmo;
-    private float shotTime = 0.0f;
-    private bool shotF = false;
-    private bool reloading = false;
-    private float reloadTime = 0.0f;
+    private GameObject _player;
+    private PlayerStatas _playerStatas;
+    private Shoot _shoot;   
+    private int _nowAmmo;
+    private float _shotTime = 0.0f;
+    private bool _shotF = false;
+    private bool _reloading = false;
+    private float _reloadTime = 0.0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = transform.root.gameObject;
-        playerStatas = player.GetComponent<PlayerStatas>();
-        animator = player.GetComponentInChildren<Animator>();
-        nowAmmo = maxAmmo;
-        _shoot = gameController.GetComponent<Shoot>();
-        _pool = gameController.GetComponent<ObjectPooling>();
-        _pool.CreatePool(bulletPrefab, maxAmmo, bulletPrefab.GetInstanceID(), Vector3.zero);
+        _player = transform.root.gameObject;
+        _playerStatas = _player.GetComponent<PlayerStatas>();
+        _animator = _player.GetComponentInChildren<Animator>();
+        _nowAmmo = _maxAmmo;
+        _shoot = _gameController.GetComponent<Shoot>();
+        _pool = _gameController.GetComponent<ObjectPooling>();
+        _pool.CreatePool(_bulletPrefab, _maxAmmo, _bulletPrefab.GetInstanceID(), Vector3.zero);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!reloading)
+        if (!_reloading)
         {
             if (Input.GetKey(KeyCode.Mouse0))
             {
-                animator.SetBool("shotF", true);
-                shotTime += 1;
-                if (shotTime % 5 == 0 && nowAmmo > 0)
+                _animator.SetBool("shotF", true);
+                _shotTime += 1;
+                if (_shotTime % 5 == 0 && _nowAmmo > 0)
                 {
-                    shotF = true;
+                    _shotF = true;
                 }
             }
             else
             {
-                animator.SetBool("shotF", false);
+                _animator.SetBool("shotF", false);
                 if (Input.GetKeyDown(KeyCode.R))   // リロード
                 {
                     Reload();
                 }
             }
-            if(nowAmmo == 0)
+            if(_nowAmmo == 0)
             {
                 Reload();
             }
         }
         else
         {
-            reloadTime += Time.deltaTime;
+            _reloadTime += Time.deltaTime;
         }
-        if(reloadTime > 1)
+        if(_reloadTime > 1)
         {
-            reloading = false;
-            animator.SetBool("Reload", false);
+            _reloading = false;
+            _animator.SetBool("Reload", false);
         }
     }
     private void FixedUpdate()
     {
-        if (shotF)
+        if (_shotF)
         {            
-            nowAmmo -= 1;
-            _shoot.Shooting(ref _pool, bulletPrefab, transform, 3000);
+            _nowAmmo -= 1;
+            _shoot.Shooting(ref _pool, _bulletPrefab, transform, 3000);
             //Instantiate(bulletPrefab, transform.position, Quaternion.Euler(transform.parent.eulerAngles.x, transform.parent.eulerAngles.y, 0))
-            shotF = false;
+            _shotF = false;
             
         }
     }
 
     private void Reload()
     {
-        if (nowAmmo != maxAmmo)
+        if (_nowAmmo != _maxAmmo)
         {          
-            reloadTime = 0;
-            animator.SetBool("shotF", false);
-            animator.SetBool("Reload", true);
-            playerStatas.AddPlayerEnergy(-5);
-            reloading = true;
-            nowAmmo = maxAmmo;
+            _reloadTime = 0;
+            _animator.SetBool("shotF", false);
+            _animator.SetBool("Reload", true);
+            _playerStatas.AddPlayerEnergy(-5);
+            _reloading = true;
+            _nowAmmo = _maxAmmo;
         }
     }
 
 
     public int GetNowAmmo()
     {
-        return nowAmmo;
+        return _nowAmmo;
     }
 }

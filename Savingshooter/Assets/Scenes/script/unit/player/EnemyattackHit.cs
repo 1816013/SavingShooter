@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class EnemyattackHit : MonoBehaviour
 {
-    public GameObject damageObj;
-    private DamageUI damageUI;
+    [SerializeField]
+    private GameObject _damageObj = null;
+    private DamageUI _damageUI;
     private void Start()
     {
-        damageUI = damageObj.GetComponent<DamageUI>();
+        _damageUI = _damageObj.GetComponent<DamageUI>();
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "enemyAttack")
         {
-            damageUI.DamageEffect();
+            _damageUI.DamageEffect();
             gameObject.GetComponent<PlayerStatas>().AddPlayerEnergy(-20);
         }
         if (other.tag == "enemyShot")
         {
-            damageUI.DamageEffect();
+            _damageUI.DamageEffect();
             gameObject.GetComponent<PlayerStatas>().AddPlayerEnergy(-20);
         }
     }

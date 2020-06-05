@@ -4,8 +4,8 @@ using UnityEngine;
 
 public struct TagetStatas
 {
-    public Vector3 pos;
-    public bool player;
+    public Vector3 _pos;
+    public bool _player;
 }
 
 public class Pathfinding : MonoBehaviour
@@ -29,10 +29,10 @@ public class Pathfinding : MonoBehaviour
         RaycastHit hit = new RaycastHit();
         if (FinalTargetRayCast(pos, out hit, radius))
         {
-            targetStatas.player = true;
-            targetStatas.pos = hit.transform.position;
+            targetStatas._player = true;
+            targetStatas._pos = hit.transform.position;
             // 二次元にするためにyを調整
-            targetStatas.pos.y = pos.y;
+            targetStatas._pos.y = pos.y;
            
             return targetStatas;
         }
@@ -42,7 +42,7 @@ public class Pathfinding : MonoBehaviour
             {
                 Debug.Log("当たってない");
             }
-            targetStatas.player = false;
+            targetStatas._player = false;
             SetTargetList(radius * 2.5f, pos,ref hit);  // 2.5はキャラの半径にかけて
 
             //一番近い点を削除
@@ -101,13 +101,13 @@ public class Pathfinding : MonoBehaviour
                     }
                 }
 
-                targetStatas.pos = _targetList[minPathID];
+                targetStatas._pos = _targetList[minPathID];
                 return targetStatas;
             }
             else
             {
                 // 再計算しろあほ
-                targetStatas.pos = pos;
+                targetStatas._pos = pos;
             }
             
         }

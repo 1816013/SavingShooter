@@ -5,12 +5,13 @@ using UnityEngine.UI;
 
 public class Score : MonoBehaviour
 {
-    public GameObject textobj;
-    // Update is called once per frame
+    [SerializeField]
+    private GameObject _textobj = null;
+
     void FixedUpdate()
     {
-        Text popText = textobj.GetComponent<Text>();
-        int score = GameController.score; 
+        Text popText = _textobj.GetComponent<Text>();
+        int score = GameController._score; 
         popText.text = "Score  " + score.ToString();
     }
 }

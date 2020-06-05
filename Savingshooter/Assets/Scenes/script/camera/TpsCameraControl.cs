@@ -5,7 +5,7 @@ using UnityEngine;
 public class TpsCameraControl : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _player;
+    private GameObject _player = null;
     private Vector3 _offset;
     private Vector3 _mousePos; //真ん中からのマウスの座標
     private Vector3 _screenSize; // ｽｸﾘｰﾝの大きさ

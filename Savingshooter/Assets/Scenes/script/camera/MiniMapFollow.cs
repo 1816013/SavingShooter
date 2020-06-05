@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class MiniMapFollow : MonoBehaviour
 {
-    public GameObject _player;
+    [SerializeField]
+    private GameObject _player;
     private Vector3 _offset;
 
     private void Start()

@@ -45,8 +45,6 @@ public class ObjectPooling : MonoBehaviour
     private GameObject CreateNewObject(Vector3 pos)
     {
         GameObject newObj = Instantiate(_poolObj, pos, Quaternion.identity);
-       //newObj.name = _poolObj.name + (_poolList.Count + 1);
-
         return newObj;
     }
 }

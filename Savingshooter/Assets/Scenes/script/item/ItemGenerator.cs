@@ -5,10 +5,10 @@ using UnityEngine;
 public class ItemGenerator : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _itemPrefab;
-    private ObjectPooling _pool;
+    private GameObject _itemPrefab = null;
     [SerializeField]
-    private GameObject _player;
+    private GameObject _player = null;
+    private ObjectPooling _pool;    
     private PlayerStatas _playerStatas;
     private bool _instanceF;   // 生成するか
     private float _intervalTime;     // 経過時間

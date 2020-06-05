@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class EnemyShooting : MonoBehaviour
 {
-    public GameObject _enemyBulletPrefab;
+    [SerializeField]
+    private GameObject _enemyBulletPrefab = null;
     private GameObject _gameController;
     private ObjectPooling _pool;
     private Shoot _shoot;

@@ -5,13 +5,15 @@ using UnityEngine.UI;
 
 public class PlayerEnergy : MonoBehaviour
 {
-    public GameObject textobj;
-    public GameObject player;
-    // Update is called once per frame
+    [SerializeField]
+    private GameObject _textobj = null;
+    [SerializeField]
+    private GameObject _player = null;
+
     void FixedUpdate()
     {
-        Text popText = textobj.GetComponent<Text>();
-        float energy = player.GetComponent<PlayerStatas>().GetPlayerEnergy();
+        Text popText = _textobj.GetComponent<Text>();
+        float energy = _player.GetComponent<PlayerStatas>().GetPlayerEnergy();
         energy = Mathf.Floor(energy);
         popText.text = "EN " + energy.ToString(); 
     }

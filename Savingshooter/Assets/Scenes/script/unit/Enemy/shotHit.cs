@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class shotHit : MonoBehaviour
 {
-    private EnemyStatas enemyStatas;              //Statasクラス
+    private EnemyStatas _enemyStatas;              //Statasクラス
 
     // Start is called before the first frame update
     void Awake()
     {
-        enemyStatas = gameObject.GetComponent<EnemyStatas>();
+        _enemyStatas = gameObject.GetComponent<EnemyStatas>();
         
     }
     void OnTriggerEnter(Collider other)
@@ -17,12 +17,12 @@ public class shotHit : MonoBehaviour
         if (other.CompareTag("shell"))
         {
             ShotStatas shotStatas = other.GetComponent<ShotStatas>();
-            if (enemyStatas == null)
+            if (_enemyStatas == null)
             {
                 Debug.Log("バグっている");
             }
             //ステータスクラスのDamage関数を呼び出す
-            enemyStatas.Damage(shotStatas.GetShotPower());
+            _enemyStatas.Damage(shotStatas.GetShotPower());
 
             //ぶつかってきたオブジェクトを破壊する.
             other.gameObject.SetActive(false);
