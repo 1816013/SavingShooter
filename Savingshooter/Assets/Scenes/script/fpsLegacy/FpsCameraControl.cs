@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class FpsCameraControl : MonoBehaviour
 {
-    public GameObject _player;
-    public Vector2 _minMaxAngle = new Vector2(-65, 65);
     [SerializeField]
+    private GameObject _player;
+    [SerializeField]
+    private Vector2 _minMaxAngle = new Vector2(-65, 65);
     private float _xRotation;   // プレイヤーが向いている向き
-    [SerializeField]
     private float _yRotation;   
     void FixedUpdate()
     {

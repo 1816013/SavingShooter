@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class MiniMapFollow : MonoBehaviour
 {
-    public GameObject player;
-    private Vector3 offset;
+    public GameObject _player;
+    private Vector3 _offset;
 
     private void Start()
     {
-        offset = transform.position;
+        _offset = transform.position;
     }
     // Update is called once per frame
     void Update()
     {
-        transform.position = player.transform.position + offset;
+        transform.position = _player.transform.position + _offset;
     }
 }

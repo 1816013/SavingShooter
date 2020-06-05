@@ -4,47 +4,49 @@ using UnityEngine;
 
 public class ItemGenerator : MonoBehaviour
 {
-    public GameObject itemPrefab;
+    [SerializeField]
+    private GameObject _itemPrefab;
     private ObjectPooling _pool;
-    public GameObject player;
-    private PlayerStatas playerStatas;
-    private bool instanceF;   // 生成するか
-    private float intervalTime;     // 経過時間
-    private float time;             // 2秒ごとにランダムにする時用
-    private float minTime = 10;  // これ以上じゃないと生成しない
-    private float maxTime = 30;  // これ以上になると強制生成
-    private float minDistance = 5;
-    private float maxDistance = 10;
+    [SerializeField]
+    private GameObject _player;
+    private PlayerStatas _playerStatas;
+    private bool _instanceF;   // 生成するか
+    private float _intervalTime;     // 経過時間
+    private float _time;             // 2秒ごとにランダムにする時用
+    private float _minTime = 10;  // これ以上じゃないと生成しない
+    private float _maxTime = 30;  // これ以上になると強制生成
+    private float _minDistance = 5;
+    private float _maxDistance = 10;
 
     private void Start()
     {
         _pool = gameObject.GetComponent<ObjectPooling>();
-        playerStatas = player.GetComponent<PlayerStatas>();
-        _pool.CreatePool(itemPrefab, 5, itemPrefab.GetInstanceID(), Vector3.zero);
+        _playerStatas = _player.GetComponent<PlayerStatas>();
+        _pool.CreatePool(_itemPrefab, 5, _itemPrefab.GetInstanceID(), Vector3.zero);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        intervalTime += Time.deltaTime;
-        time += Time.deltaTime;
-        if (intervalTime >= 10 && time > 2.0f)
+        _intervalTime += Time.deltaTime;
+        _time += Time.deltaTime;
+        if (_intervalTime >= 10 && _time > 2.0f)
         {
-            time = 0.0f;
-            instanceF = RandomWithEnergy();
+            _time = 0.0f;
+            _instanceF = RandomWithEnergy();
         }
         
-        if (intervalTime >= maxTime || intervalTime >= minTime && instanceF)
+        if (_intervalTime >= _maxTime || _intervalTime >= _minTime && _instanceF)
         { 
-            GameObject item = _pool.GetPoolObj(itemPrefab.GetInstanceID(), RandamVec3(new Vector3(-1f, -1f, -1f), new Vector3(1f, 1f, 1f)) * Random.Range(minDistance, maxDistance));
-            intervalTime = 0.0f;
+            GameObject item = _pool.GetPoolObj(_itemPrefab.GetInstanceID(), RandamVec3(new Vector3(-1f, -1f, -1f), new Vector3(1f, 1f, 1f)) * Random.Range(_minDistance, _maxDistance));
+            _intervalTime = 0.0f;
         }
     }
     bool RandomWithEnergy()
     {
      
         float random = Random.Range(0, 100);       
-        if(200.0f / playerStatas.GetPlayerEnergy() > random)
+        if(200.0f / _playerStatas.GetPlayerEnergy() > random)
         {
             return true;
         }

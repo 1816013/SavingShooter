@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class FpsShooting : MonoBehaviour
 {
-    public GameObject bulletPrefab;
-    public GameObject fpsCamera;
+    [SerializeField]
+    private GameObject _bulletPrefab;
+    [SerializeField]
+    private GameObject _fpsCamera;
     private GameObject player;
     public int maxAmmo = 50;
     private int nowAmmo;
@@ -28,9 +30,9 @@ public class FpsShooting : MonoBehaviour
             {
                 nowAmmo -= 1;
 
-                GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(transform.parent.eulerAngles.x, transform.parent.eulerAngles.y, 0));
+                GameObject bullet = Instantiate(_bulletPrefab, transform.position, Quaternion.Euler(transform.parent.eulerAngles.x, transform.parent.eulerAngles.y, 0));
                 Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
-                Ray ray = new Ray(fpsCamera.transform.position, fpsCamera.transform.forward);
+                Ray ray = new Ray(_fpsCamera.transform.position, _fpsCamera.transform.forward);
                 RaycastHit hit;//ヒットした座標
                 if (Physics.Raycast(ray, out hit, 100.0f))
                 {//レイを飛ばしヒットしたら

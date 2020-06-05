@@ -4,35 +4,36 @@ using UnityEngine;
 
 public class TpsCameraControl : MonoBehaviour
 {
-    public GameObject player;
-    private Vector3 offset;
-    private Vector3 mousePos; //真ん中からのマウスの座標
-    private Vector3 screenSize; // ｽｸﾘｰﾝの大きさ
-    private Vector3 move;    // 移動の大きさ
-    private Vector3 moveCoefficient;    // 移動係数
+    [SerializeField]
+    private GameObject _player;
+    private Vector3 _offset;
+    private Vector3 _mousePos; //真ん中からのマウスの座標
+    private Vector3 _screenSize; // ｽｸﾘｰﾝの大きさ
+    private Vector3 _move;    // 移動の大きさ
+    private Vector3 _moveCoefficient;    // 移動係数
 
     private void Start()
     {
-        offset = transform.position;
-        screenSize = new Vector3(Screen.width, Screen.height, 0.0f);
-        move = new Vector3(4.0f, 0.0f, 2.0f);
+        _offset = transform.position;
+        _screenSize = new Vector3(Screen.width, Screen.height, 0.0f);
+        _move = new Vector3(4.0f, 0.0f, 2.0f);
     }
 
     void Update()
     {
-        mousePos = Input.mousePosition - screenSize / 2;
+        _mousePos = Input.mousePosition - _screenSize / 2;
     }
     void FixedUpdate()
     {
-        moveCoefficient.x = mousePos.x / (screenSize.x / 2);
-        moveCoefficient.z = mousePos.y / (screenSize.y / 2);
-        moveCoefficient.x = Mathf.Clamp(moveCoefficient.x, -1.0f, 1.0f);
-        moveCoefficient.z = Mathf.Clamp(moveCoefficient.z, -1.0f, 1.0f);
-        Vector3 movement = move;
-        movement.x = move.x * moveCoefficient.x;
-        movement.z = move.z * moveCoefficient.z;
+        _moveCoefficient.x = _mousePos.x / (_screenSize.x / 2);
+        _moveCoefficient.z = _mousePos.y / (_screenSize.y / 2);
+        _moveCoefficient.x = Mathf.Clamp(_moveCoefficient.x, -1.0f, 1.0f);
+        _moveCoefficient.z = Mathf.Clamp(_moveCoefficient.z, -1.0f, 1.0f);
+        Vector3 movement = _move;
+        movement.x = _move.x * _moveCoefficient.x;
+        movement.z = _move.z * _moveCoefficient.z;
 
         // 移動
-        transform.position = offset + movement + player.transform.position;
+        transform.position = _offset + movement + _player.transform.position;
     }
 }

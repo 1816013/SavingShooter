@@ -9,14 +9,16 @@ public enum ItemType    // アイテムが増えたときの生成時用
 
 public class itemStatas : MonoBehaviour
 {
-    public ItemType itemType;
-    public float destroyTime = 10.0f;
+    [SerializeField]
+    private ItemType _itemType;
+    [SerializeField]
+    private float _destroyTime = 10.0f;
 
     // Start is called before the first frame update
     private void OnEnable()
     {
-        itemType = ItemType.EnergyPack;
-        StartCoroutine(DelayObject(destroyTime));
+        _itemType = ItemType.EnergyPack;
+        StartCoroutine(DelayObject(_destroyTime));
     }
 
     IEnumerator DelayObject(float time)
@@ -27,6 +29,6 @@ public class itemStatas : MonoBehaviour
 
     public ItemType GetItemType()
     {
-        return itemType;
+        return _itemType;
     }
 }
