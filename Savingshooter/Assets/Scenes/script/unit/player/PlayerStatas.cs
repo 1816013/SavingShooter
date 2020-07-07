@@ -38,7 +38,7 @@ public class PlayerStatas : MonoBehaviour
         {
             _powerCost = _playerPower * 2;     // 最低値  0.1の時 0.2 : 0.5の時  1
         }
-        _playerEnergy -= Time.deltaTime * _powerCost * 3;
+        _playerEnergy -= Time.deltaTime * _powerCost * 2;
     
         if(_playerEnergy <= 0)
         {

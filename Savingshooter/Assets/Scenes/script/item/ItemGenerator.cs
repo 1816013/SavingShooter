@@ -13,8 +13,8 @@ public class ItemGenerator : MonoBehaviour
     private bool _instanceF;   // 生成するか
     private float _intervalTime;     // 経過時間
     private float _time;             // 2秒ごとにランダムにする時用
-    private float _minTime = 10;  // これ以上じゃないと生成しない
-    private float _maxTime = 30;  // これ以上になると強制生成
+    private float _minTime = 5;  // これ以上じゃないと生成しない
+    private float _maxTime = 25;  // これ以上になると強制生成
     private float _minDistance = 5;
     private float _maxDistance = 10;
 

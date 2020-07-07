@@ -17,7 +17,7 @@ public class Pathfinding : MonoBehaviour
     private Vector3 _boxColliderSize;
 
     private void Awake()
-    {
+    { 
         // finaltargetはこのゲームではプレイヤーのみなのでここに書く
         finalTarget = GameObject.FindGameObjectWithTag("Player");     
     }
@@ -27,7 +27,7 @@ public class Pathfinding : MonoBehaviour
     {
         Init(pos);
         RaycastHit hit = new RaycastHit();
-        if (FinalTargetRayCast(pos, out hit, radius))
+        if (FinalTargetRayCast(pos, ref hit, radius))
         {
             targetStatas._player = true;
             targetStatas._pos = hit.transform.position;
@@ -40,10 +40,12 @@ public class Pathfinding : MonoBehaviour
         {
             if(hit.collider == null)
             {
-                Debug.Log("当たってない");
+                //レイが当たってなかったら再計算
+                targetStatas._pos = pos;
+                return targetStatas;
             }
             targetStatas._player = false;
-            SetTargetList(radius * 2.5f, pos,ref hit);  // 2.5はキャラの半径にかけて
+            SetTargetList(radius * 2f, pos,ref hit);  // 2.5はキャラの半径にかけて直径+aにする
 
             //一番近い点を削除
             float min = float.MaxValue;
@@ -67,7 +69,7 @@ public class Pathfinding : MonoBehaviour
             {
                 var targetRay = new Ray(pos, (_targetList[i] - pos).normalized);
                 RaycastHit targetHit;
-                if (Physics.SphereCast(targetRay, radius,out targetHit, (_targetList[i] - pos).magnitude))
+                if (Physics.SphereCast(targetRay,radius, out targetHit, (_targetList[i] - pos).magnitude))
                 {
                     
                     if (targetHit.collider.CompareTag("Collision"))
@@ -92,7 +94,7 @@ public class Pathfinding : MonoBehaviour
                 int minPathID = 0;
                 for (int i = 0; i < _targetList.Count; i++)
                 {                        // 目的地までの距離                    // 目的地からプレイヤーまでの距離 
-                    float pathDistance = (_targetList[i] - pos).magnitude + (finalTarget.transform.position - _targetList[i]).magnitude;
+                    float pathDistance = /*(_targetList[i] - pos).magnitude + */(finalTarget.transform.position - _targetList[i]).magnitude;
 
                     if (pathDistance <= minPathDistance)
                     {
@@ -106,7 +108,7 @@ public class Pathfinding : MonoBehaviour
             }
             else
             {
-                // 再計算しろあほ
+                // 再計算
                 targetStatas._pos = pos;
             }
             
@@ -122,11 +124,11 @@ public class Pathfinding : MonoBehaviour
         _boxColliderSize = Vector3.zero;
     }
     // 最終目標(プレイヤー)に当たっているか
-    public bool FinalTargetRayCast(Vector3 rayOrigin, out RaycastHit hit, float radius)
+    public bool FinalTargetRayCast(Vector3 rayOrigin, ref RaycastHit hit, float radius)
     {
         var ray = new Ray(rayOrigin, (finalTarget.transform.position - rayOrigin).normalized);
        
-        if (Physics.SphereCast(ray, radius, out hit, (finalTarget.transform.position - rayOrigin).magnitude))
+        if (Physics.SphereCast(ray, radius , out hit, (finalTarget.transform.position - rayOrigin).magnitude))
         {
            // Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue, 5, false);
             if (hit.collider.CompareTag("Player"))

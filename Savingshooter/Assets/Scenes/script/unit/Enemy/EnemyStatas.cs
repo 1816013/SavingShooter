@@ -31,6 +31,7 @@ public class EnemyStatas : MonoBehaviour
         _animator = transform.GetComponentInChildren<Animator>();
         _renderer = gameObject.GetComponentInChildren<Renderer>();
         _masterColor = _renderer.material.color;
+
     }
 
     private void Start()

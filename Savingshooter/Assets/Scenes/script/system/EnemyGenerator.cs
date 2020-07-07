@@ -15,9 +15,9 @@ public class EnemyGenerator : MonoBehaviour
     private ObjectPooling _pool;
 
     [SerializeField]
-    private float minTime = 2f; // 時間間隔の最小値 
+    private float minTime = 5f; // 時間間隔の最小値 
     [SerializeField]
-    private float maxTime = 5f; // 時間間隔の最大値
+    private float maxTime = 7f; // 時間間隔の最大値
     //敵生成時間間隔
     private float _interval;
     //経過時間
@@ -26,8 +26,8 @@ public class EnemyGenerator : MonoBehaviour
     private Vector3 _minVec = new Vector3(-1, 0, -1); 
     private Vector3 _maxVec = new Vector3(1, 0, 1); 
 
-    private float _minDistance = 30;    // 出現距離の最小値
-    private float _maxDistance = 35;    // 出現距離の最大値
+    private float _minDistance = 25;    // 出現距離の最小値
+    private float _maxDistance = 30;    // 出現距離の最大値
 
     private List<GameObject> _enemyPrefabList;
 
@@ -44,8 +44,14 @@ public class EnemyGenerator : MonoBehaviour
         _pool = gameObject.GetComponent<ObjectPooling>();
         // エネミーは作られた瞬間にレイキャストする関係上座標入力が必要
         for (int i = 0; i < (int)EnemyType.Max; i++)
+        {   // 8 は敵の初期プール数
+            _pool.CreatePool(_enemyPrefabList[i], 8, _enemyPrefabList[i].GetInstanceID(), GetRandomVec(_minVec, _maxVec).normalized * GetRandomF(_minDistance, _maxDistance)); 
+        }
+        // 一番最初の敵
+        for (int i = 0; i < 5; i++)
         {
-            _pool.CreatePool(_enemyPrefabList[i], 5, _enemyPrefabList[i].GetInstanceID(), GetRandomVec(_minVec, _maxVec).normalized * GetRandomF(_minDistance, _maxDistance));
+            int random = Random.Range((int)EnemyType.Destroy, (int)EnemyType.Max);
+            _pool.GetPoolObj(_enemyPrefabList[random].GetInstanceID(), GetRandomVec(_minVec, _maxVec).normalized * GetRandomF(_minDistance, _maxDistance));
         }
     }
 

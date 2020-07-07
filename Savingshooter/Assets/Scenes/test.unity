@@ -240,7 +240,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93cc53be370a3504f895972678d4ee0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 5426840868518179054, guid: 24cfa70277849a94594fbcc100ee917e,
+  _destroyEnemy: {fileID: 5426840868518179054, guid: 24cfa70277849a94594fbcc100ee917e,
+    type: 3}
+  _shootingEnemy: {fileID: 5426840868518179054, guid: 24cfa70277849a94594fbcc100ee917e,
+    type: 3}
+  _clossRangeEnemy: {fileID: 5426840868518179054, guid: 24cfa70277849a94594fbcc100ee917e,
     type: 3}
   minTime: 2
   maxTime: 5

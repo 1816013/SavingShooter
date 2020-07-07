@@ -28,6 +28,7 @@ public class EnemyAI : MonoBehaviour
     private Pathfinding _pathfinding;
     private TagetStatas _target;
     private LineRenderer _lazerPointer;
+    private bool _isAttacking;    // 攻撃中かどうか
 
     // Start is called before the first frame update
     private void Awake()
@@ -39,6 +40,7 @@ public class EnemyAI : MonoBehaviour
 
     private void OnEnable()
     {
+        _isAttacking = false;
         _target = new TagetStatas();
         SetEnemyAI();
         _enemyAIState = EnemyAIState.Chase;
@@ -73,11 +75,16 @@ public class EnemyAI : MonoBehaviour
             }
             if (_enemyAIState == EnemyAIState.Attack)
             {
-                if (!_target._player || (_target._pos - transform.position).magnitude > _attackDistanse )
+                
+                if ((!_target._player || (_target._pos - transform.position).magnitude > _attackDistanse )&& !_isAttacking)
                 {
+                    if(_sphereCollider != null)
+                    {
+                        _sphereCollider.enabled = false;
+                    }
                     _enemyAIState = EnemyAIState.Chase;                 
                 }
-                if (_attackTime == 0)
+                if (_attackTime <= 0)
                 {
                     // ここは予備動作
                     if (_enemyStatas.GetEnemyType() == EnemyType.ClossRange)
@@ -90,11 +97,13 @@ public class EnemyAI : MonoBehaviour
                     }
                 }
                 _attackTime += Time.deltaTime;
+                _isAttacking = true;
                 if (_attackTime > _attackInterval)
                 {
-                    _attackTime = 0;
+                   
+                    
                     switch (_enemyStatas.GetEnemyType())
-                    {
+                    {                    
                         case EnemyType.Destroy:
                             Destroy();
                             break;
@@ -132,14 +141,14 @@ public class EnemyAI : MonoBehaviour
                 _lazerPointer.enabled = false;
                 _enemyShooting = _enemyAttack.GetComponent<EnemyShooting>();
                 _attackInterval = 2.0f;
-                _attackDistanse = 10.0f;
+                _attackDistanse = 15.0f;
                 _speed = 2.0f;
                 break;
             case EnemyType.ClossRange:
                 _sphereCollider = _enemyAttack.GetComponent<SphereCollider>();
                 _sphereCollider.enabled = false;
                 _attackInterval = 1.0f;
-                _attackDistanse = 2f;
+                _attackDistanse = 2.5f;
                 _speed = 4.0f;
                 break;
             default:
@@ -175,9 +184,7 @@ public class EnemyAI : MonoBehaviour
         _charController.Move(_move * _speed * Time.deltaTime);
         if ((_target._pos - transform.position).magnitude <= _attackDistanse && _target._player)
         {
-            _enemyAIState = EnemyAIState.Attack;
-
-            
+            _enemyAIState = EnemyAIState.Attack;           
         }
     }
 
@@ -192,17 +199,19 @@ public class EnemyAI : MonoBehaviour
     // 射撃
     private void Shoot()
     {
+        _attackTime = 0;
         _lazerPointer.enabled = true;
        // StopCoroutine(_coroutine);
         StartCoroutine(BlinkLayzerPointer(1));
         _enemyShooting.Shoot();
+        _isAttacking = false;
     }
 
     // 近距離攻撃
     private void ClossRangeAttack()
     {
        
-        AttackEnd(1);
+        StartCoroutine(AttackEnd(1));
         _sphereCollider.enabled = true;
     }
 
@@ -234,7 +243,9 @@ public class EnemyAI : MonoBehaviour
         {
             yield return null;
         }
+        _attackTime = 0;
         _animator.SetBool("Attack", false);
+        _isAttacking = false;
         _sphereCollider.enabled = false;
         yield break;
     }

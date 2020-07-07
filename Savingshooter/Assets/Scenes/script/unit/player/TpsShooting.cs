@@ -10,6 +10,9 @@ public class TpsShooting : MonoBehaviour
     private GameObject _gameController = null;
     [SerializeField]
     private int _maxAmmo = 50;
+    [SerializeField]
+    private AudioClip _audioClip;
+    private AudioSource _audioSource;
     private Animator _animator; 
     private ObjectPooling _pool;
     private GameObject _player;
@@ -31,43 +34,48 @@ public class TpsShooting : MonoBehaviour
         _shoot = _gameController.GetComponent<Shoot>();
         _pool = _gameController.GetComponent<ObjectPooling>();
         _pool.CreatePool(_bulletPrefab, _maxAmmo, _bulletPrefab.GetInstanceID(), Vector3.zero);
+        _audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!_reloading)
+        if (!_playerStatas.IsDeath())
         {
-            if (Input.GetKey(KeyCode.Mouse0))
+            if (!_reloading)
             {
-                _animator.SetBool("shotF", true);
-                _shotTime += 1;
-                if (_shotTime % 5 == 0 && _nowAmmo > 0)
+                if (Input.GetKey(KeyCode.Mouse0))
                 {
-                    _shotF = true;
+                    _animator.SetBool("shotF", true);
+                    _shotTime += 1;
+                    if (_shotTime % 5 == 0 && _nowAmmo > 0)
+                    {
+                        _audioSource.PlayOneShot(_audioClip);
+                        _shotF = true;
+                    }
                 }
-            }
-            else
-            {
-                _animator.SetBool("shotF", false);
-                if (Input.GetKeyDown(KeyCode.R))   // リロード
+                else
+                {
+                    _animator.SetBool("shotF", false);
+                    if (Input.GetKeyDown(KeyCode.R))   // リロード
+                    {
+                        Reload();
+                    }
+                }
+                if (_nowAmmo == 0)
                 {
                     Reload();
                 }
             }
-            if(_nowAmmo == 0)
+            else
             {
-                Reload();
+                _reloadTime += Time.deltaTime;
             }
-        }
-        else
-        {
-            _reloadTime += Time.deltaTime;
-        }
-        if(_reloadTime > 1)
-        {
-            _reloading = false;
-            _animator.SetBool("Reload", false);
+            if (_reloadTime > 1)
+            {
+                _reloading = false;
+                _animator.SetBool("Reload", false);
+            }
         }
     }
     private void FixedUpdate()
