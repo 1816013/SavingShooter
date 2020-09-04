@@ -14,7 +14,7 @@ public class ItemGenerator : MonoBehaviour
     private float _intervalTime;     // 経過時間
     private float _time;             // 2秒ごとにランダムにする時用
     private float _minTime = 5;  // これ以上じゃないと生成しない
-    private float _maxTime = 25;  // これ以上になると強制生成
+    private float _maxTime = 20;  // これ以上になると強制生成
     private float _minDistance = 5;
     private float _maxDistance = 10;
 
@@ -36,16 +36,16 @@ public class ItemGenerator : MonoBehaviour
             _instanceF = RandomWithEnergy();
         }
         
-        if (_intervalTime >= _maxTime || _intervalTime >= _minTime && _instanceF)
+        if (_intervalTime >= _maxTime || (_intervalTime >= _minTime && _instanceF))
         { 
-            GameObject item = _pool.GetPoolObj(_itemPrefab.GetInstanceID(), RandamVec3(new Vector3(-1f, -1f, -1f), new Vector3(1f, 1f, 1f)) * Random.Range(_minDistance, _maxDistance));
+            GameObject item = _pool.GetPoolObj(_itemPrefab.GetInstanceID(), RandamVec3(new Vector3(-1f, 0, -1f), new Vector3(1f, 1f, 1f)) * Random.Range(_minDistance, _maxDistance));
             _intervalTime = 0.0f;
         }
     }
     bool RandomWithEnergy()
     {
      
-        float random = Random.Range(0, 100);       
+        float random = Random.Range(0, 50);       
         if(200.0f / _playerStatas.GetPlayerEnergy() > random)
         {
             return true;
