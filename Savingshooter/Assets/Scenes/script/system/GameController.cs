@@ -8,7 +8,8 @@ public class GameController : MonoBehaviour
     static public int _score = 0;
     [SerializeField]
     private GameObject _pauseUI = null;
-   
+
+    private float fps;
 
     private void Start()
     {
@@ -17,7 +18,9 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        fps = 1f / Time.deltaTime;
+      //  Debug.Log(fps);
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             _pauseUI.SetActive(!_pauseUI.activeSelf);
             if(_pauseUI.activeSelf)

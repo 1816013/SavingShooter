@@ -9,6 +9,9 @@ public class PlayerStatas : MonoBehaviour
     private Animator _animator;
     private float _playerEnergy = 200.0f; // エネルギー
     private float _playerPower = 0.5f;  // 出力
+    [SerializeField]
+    private float _speedMax = 10f; // 最高速度
+    private float _playerSpeed; // 現在速度
     private float _powerCost;            // エネルギー消費の係数
     private bool _death;
 
@@ -38,9 +41,12 @@ public class PlayerStatas : MonoBehaviour
         {
             _powerCost = _playerPower * 2;     // 最低値  0.1の時 0.2 : 0.5の時  1
         }
-        _playerEnergy -= Time.deltaTime * _powerCost * 2;
-    
-        if(_playerEnergy <= 0)
+        _playerEnergy -= Time.deltaTime * _powerCost * 3;
+        _playerSpeed = _speedMax * _playerPower;
+        _playerSpeed = Mathf.Clamp(_playerSpeed, 3f, 10f);
+
+
+        if (_playerEnergy <= 0)
         {
             _death = true;
             _animator.SetBool("Die", true);
@@ -50,6 +56,10 @@ public class PlayerStatas : MonoBehaviour
     public float GetPlayerPower()
     {
         return _playerPower;
+    }
+    public float GetPlayerSpeed()
+    {
+        return _playerSpeed;
     }
     public float GetPlayerEnergy()
     {

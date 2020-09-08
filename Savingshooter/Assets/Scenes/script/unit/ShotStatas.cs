@@ -17,15 +17,16 @@ public class ShotStatas : MonoBehaviour
     }
     private void OnEnable()
     {
-        StartCoroutine(DelayDestroyBullet(1.0f));
+        StartCoroutine(DelayDestroyBullet(2.0f));
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(!other.CompareTag("enemy")&& !other.CompareTag("Player") && !other.CompareTag("Item"))
+        if (other.CompareTag("enemy")|| other.CompareTag("Player") || other.CompareTag("Item") || other.CompareTag("shell"))
         {
-            gameObject.SetActive(false);
+            return;
         }
+        DestroyBullet();
     }
 
 

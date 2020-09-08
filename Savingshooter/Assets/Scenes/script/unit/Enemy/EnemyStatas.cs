@@ -45,18 +45,16 @@ public class EnemyStatas : MonoBehaviour
         switch (_enemyType)
         {
             case EnemyType.Destroy:
-                _hitPoint = 200.0f;
+                _hitPoint = 20.0f;
                 _score = 50;
                 break;
             case EnemyType.Shoot:
-                _hitPoint = 300.0f;
+                _hitPoint = 60.0f;
                 _score = 100;
                 break;
             case EnemyType.ClossRange:
-                _hitPoint = 100.0f;
+                _hitPoint = 40.0f;
                 _score = 50;
-                break;
-            case EnemyType.Max:
                 break;
             default:
                 break;

@@ -99,9 +99,7 @@ public class EnemyAI : MonoBehaviour
                 _attackTime += Time.deltaTime;
                 _isAttacking = true;
                 if (_attackTime > _attackInterval)
-                {
-                   
-                    
+                {                   
                     switch (_enemyStatas.GetEnemyType())
                     {                    
                         case EnemyType.Destroy:
@@ -132,24 +130,24 @@ public class EnemyAI : MonoBehaviour
             case EnemyType.Destroy:
                 _sphereCollider = _enemyAttack.GetComponent<SphereCollider>();
                 _sphereCollider.enabled = false;
-                _attackInterval = 2.0f;
+                _attackInterval = 1.0f;
                 _attackDistanse = 3.0f;
-                _speed = 3.0f;
+                _speed = 6.0f;
                 break;
             case EnemyType.Shoot:
                 _lazerPointer = _enemyAttack.GetComponent<LineRenderer>();
                 _lazerPointer.enabled = false;
                 _enemyShooting = _enemyAttack.GetComponent<EnemyShooting>();
                 _attackInterval = 2.0f;
-                _attackDistanse = 15.0f;
-                _speed = 2.0f;
+                _attackDistanse = 13.0f;
+                _speed = 4.0f;
                 break;
             case EnemyType.ClossRange:
                 _sphereCollider = _enemyAttack.GetComponent<SphereCollider>();
                 _sphereCollider.enabled = false;
                 _attackInterval = 1.0f;
                 _attackDistanse = 2.5f;
-                _speed = 4.0f;
+                _speed = 8.0f;
                 break;
             default:
                 break;
@@ -243,6 +241,7 @@ public class EnemyAI : MonoBehaviour
         {
             yield return null;
         }
+        _enemyAIState = EnemyAIState.Chase;
         _attackTime = 0;
         _animator.SetBool("Attack", false);
         _isAttacking = false;

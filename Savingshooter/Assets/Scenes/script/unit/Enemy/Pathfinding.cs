@@ -15,6 +15,7 @@ public class Pathfinding : MonoBehaviour
     private TagetStatas targetStatas;  // 近くのターゲット
     private Vector3[] _edges;
     private Vector3 _boxColliderSize;
+    private const int layerMask = 1 << 8 | 1 << 13;
 
     private void Awake()
     { 
@@ -45,7 +46,7 @@ public class Pathfinding : MonoBehaviour
                 return targetStatas;
             }
             targetStatas._player = false;
-            SetTargetList(radius * 2f, pos,ref hit);  // 2.5はキャラの半径にかけて直径+aにする
+            SetTargetList(radius, pos,ref hit);  // 2.5はキャラの半径にかけて直径+aにする
 
             //一番近い点を削除
             float min = float.MaxValue;
@@ -67,9 +68,10 @@ public class Pathfinding : MonoBehaviour
             // 見えないところの要素削除
             for (int i = _targetList.Count - 1; i >= 0; i--)
             {
-                var targetRay = new Ray(pos, (_targetList[i] - pos).normalized);
+                var nVec = (_targetList[i] - pos).normalized;
+                var targetRay = new Ray(pos + (-nVec * radius), nVec);
                 RaycastHit targetHit;
-                if (Physics.SphereCast(targetRay,radius, out targetHit, (_targetList[i] - pos).magnitude))
+                if (Physics.SphereCast(targetRay,radius, out targetHit, (_targetList[i] - pos).magnitude, layerMask))
                 {
                     
                     if (targetHit.collider.CompareTag("Collision"))
@@ -77,16 +79,12 @@ public class Pathfinding : MonoBehaviour
                         _targetList.RemoveAt(i);
                     }
                 }
-                else
-                {
-               //     Debug.DrawRay(targetRay.origin, targetRay.direction * (_targetList[i] - pos).magnitude, Color.blue, 5, false);
-                }
             }
-            if (_targetList.Count == 0)
+            if(_targetList.Count == 0)
             {
                 Debug.Log("削除しすぎ");
             }
-
+  
             // 見えている所から目的地を割り出す
             if (_targetList.Count > 1)
             {
@@ -121,14 +119,16 @@ public class Pathfinding : MonoBehaviour
         _targetList = new List<Vector3>();
         _edges =  new Vector3[0];
         targetStatas = new TagetStatas();
+
         _boxColliderSize = Vector3.zero;
     }
     // 最終目標(プレイヤー)に当たっているか
     public bool FinalTargetRayCast(Vector3 rayOrigin, ref RaycastHit hit, float radius)
     {
-        var ray = new Ray(rayOrigin, (finalTarget.transform.position - rayOrigin).normalized);
+        var nRay = (finalTarget.transform.position - rayOrigin).normalized;
+        var ray = new Ray(rayOrigin + (-nRay * radius), nRay);
        
-        if (Physics.SphereCast(ray, radius , out hit, (finalTarget.transform.position - rayOrigin).magnitude))
+        if (Physics.SphereCast(ray, radius , out hit, (finalTarget.transform.position - rayOrigin).magnitude, layerMask))
         {
            // Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue, 5, false);
             if (hit.collider.CompareTag("Player"))

@@ -11,8 +11,6 @@ public class TpsController : MonoBehaviour
     private CharacterController _charController;
     //　キャラクターの速度
     private Vector3 _move;
-    [SerializeField]
-    private float _speed = 5.0f;
     Plane _plane = new Plane();
     private float _distance = 0.0f;
     Vector3 _planeOffset;
@@ -59,7 +57,7 @@ public class TpsController : MonoBehaviour
             //　重力値を計算
             _move.y += Physics.gravity.y * Time.deltaTime;
             //　キャラクターコントローラのMoveを使ってキャラクターを移動させる
-            _charController.Move(_move * _speed * Time.deltaTime);
+            _charController.Move(_move * _playerStatas.GetPlayerSpeed() * Time.deltaTime);
         }
     }
 }

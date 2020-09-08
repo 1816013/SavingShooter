@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class shotHit : MonoBehaviour
 {
+    [SerializeField]
     private EnemyStatas _enemyStatas;              //Statasクラス
 
     // Start is called before the first frame update
     void Awake()
     {
-        _enemyStatas = gameObject.GetComponent<EnemyStatas>();
+       // _enemyStatas = gameObject.GetComponent<EnemyStatas>();
         
     }
     void OnTriggerEnter(Collider other)

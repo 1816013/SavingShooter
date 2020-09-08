@@ -48,7 +48,7 @@ public class EnemyGenerator : MonoBehaviour
             _pool.CreatePool(_enemyPrefabList[i], 8, _enemyPrefabList[i].GetInstanceID(), GetRandomVec(_minVec, _maxVec).normalized * GetRandomF(_minDistance, _maxDistance)); 
         }
         // 一番最初の敵
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 3; i++)
         {
             int random = Random.Range((int)EnemyType.Destroy, (int)EnemyType.Max);
             _pool.GetPoolObj(_enemyPrefabList[random].GetInstanceID(), GetRandomVec(_minVec, _maxVec).normalized * GetRandomF(_minDistance, _maxDistance));

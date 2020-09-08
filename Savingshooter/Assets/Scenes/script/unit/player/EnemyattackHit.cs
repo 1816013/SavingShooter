@@ -22,6 +22,8 @@ public class EnemyattackHit : MonoBehaviour
         {
             _damageUI.DamageEffect();
             gameObject.GetComponent<PlayerStatas>().AddPlayerEnergy(-20);
+            //ぶつかってきたオブジェクトを破壊する.
+            other.gameObject.SetActive(false);
         }
     }
 }

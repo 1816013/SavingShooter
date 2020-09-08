@@ -44,22 +44,25 @@ public class TpsShooting : MonoBehaviour
         {
             if (!_reloading)
             {
+                _shotTime += 1;
                 if (Input.GetKey(KeyCode.Mouse0))
                 {
                     _animator.SetBool("shotF", true);
-                    _shotTime += 1;
-                    if (_shotTime % 5 == 0 && _nowAmmo > 0)
+                    
+                    if (_shotTime % 10 == 0 && _nowAmmo > 0)
                     {
-                        _audioSource.PlayOneShot(_audioClip);
+                        if (Time.timeScale != 0)
+                        {
+                            _audioSource.PlayOneShot(_audioClip);
+                        }
                         _shotF = true;
                     }
                 }
                 else
                 {
-                    _animator.SetBool("shotF", false);
-                    if (Input.GetKeyDown(KeyCode.R))   // リロード
+                    if (_shotTime % 20 == 0 && _nowAmmo < 50)
                     {
-                        Reload();
+                        _nowAmmo++;
                     }
                 }
                 if (_nowAmmo == 0)
@@ -74,6 +77,8 @@ public class TpsShooting : MonoBehaviour
             if (_reloadTime > 1)
             {
                 _reloading = false;
+                _reloadTime = 0;
+                _nowAmmo = _maxAmmo;
                 _animator.SetBool("Reload", false);
             }
         }
@@ -97,9 +102,9 @@ public class TpsShooting : MonoBehaviour
             _reloadTime = 0;
             _animator.SetBool("shotF", false);
             _animator.SetBool("Reload", true);
-            _playerStatas.AddPlayerEnergy(-5);
+            _playerStatas.AddPlayerEnergy(-15);
             _reloading = true;
-            _nowAmmo = _maxAmmo;
+          
         }
     }
 
