@@ -39,9 +39,9 @@ public class PlayerStatas : MonoBehaviour
         }
         else
         {
-            _powerCost = _playerPower * 2;     // 最低値  0.1の時 0.2 : 0.5の時  1
+            _powerCost = ((_playerPower - 0.1f) * 1.25f) + 0.5f ;     // 最低値  0.1の時 0.5 : 0.5の時  1
         }
-        _playerEnergy -= Time.deltaTime * _powerCost * 3;
+        _playerEnergy -= Time.deltaTime * _powerCost * 2;
         _playerSpeed = _speedMax * _playerPower;
         _playerSpeed = Mathf.Clamp(_playerSpeed, 3f, 10f);
 

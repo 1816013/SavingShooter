@@ -49,7 +49,7 @@ public class TpsShooting : MonoBehaviour
                 {
                     _animator.SetBool("shotF", true);
                     
-                    if (_shotTime % 10 == 0 && _nowAmmo > 0)
+                    if (_shotTime % 5 == 0 && _nowAmmo > 0)
                     {
                         if (Time.timeScale != 0)
                         {
@@ -60,7 +60,8 @@ public class TpsShooting : MonoBehaviour
                 }
                 else
                 {
-                    if (_shotTime % 20 == 0 && _nowAmmo < 50)
+                    _animator.SetBool("shotF", false);
+                    if (_shotTime % 15 == 0 && _nowAmmo < 50)
                     {
                         _nowAmmo++;
                     }

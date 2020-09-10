@@ -7,7 +7,7 @@ public class ClearScene : MonoBehaviour
 {
     void FixedUpdate()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
             ChangeScene();
         }

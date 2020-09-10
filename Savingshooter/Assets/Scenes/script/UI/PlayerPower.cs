@@ -15,6 +15,6 @@ public class PlayerPower : MonoBehaviour
         Text popText = _textobj.GetComponent<Text>();
         float power = _player.GetComponent<PlayerStatas>().GetPlayerPower();
         power *= 100;
-        popText.text = "Power" + power.ToString() + "%";
+        popText.text = "Power " + ((int)power).ToString() + "%";
     }
 }

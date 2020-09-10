@@ -42,18 +42,19 @@ public class EnemyStatas : MonoBehaviour
     }
     private void OnEnable()
     {
+        var time = (int)(Time.time / 5);
         switch (_enemyType)
         {
             case EnemyType.Destroy:
-                _hitPoint = 20.0f;
+                _hitPoint = 20.0f + 10 * time;
                 _score = 50;
                 break;
             case EnemyType.Shoot:
-                _hitPoint = 60.0f;
+                _hitPoint = 60.0f + 10 * time;
                 _score = 100;
                 break;
             case EnemyType.ClossRange:
-                _hitPoint = 40.0f;
+                _hitPoint = 40.0f + 10 * time;
                 _score = 50;
                 break;
             default:

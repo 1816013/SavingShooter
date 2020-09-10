@@ -13,8 +13,8 @@ public class ItemGenerator : MonoBehaviour
     private bool _instanceF;   // 生成するか
     private float _intervalTime;     // 経過時間
     private float _time;             // 2秒ごとにランダムにする時用
-    private float _minTime = 5;  // これ以上じゃないと生成しない
-    private float _maxTime = 20;  // これ以上になると強制生成
+    private float _minTime = 3;  // これ以上じゃないと生成しない
+    private float _maxTime = 15;  // これ以上になると強制生成
     private float _minDistance = 5;
     private float _maxDistance = 10;
 
@@ -30,7 +30,7 @@ public class ItemGenerator : MonoBehaviour
     {
         _intervalTime += Time.deltaTime;
         _time += Time.deltaTime;
-        if (_intervalTime >= 10 && _time > 2.0f)
+        if (_time >= 2)
         {
             _time = 0.0f;
             _instanceF = RandomWithEnergy();
