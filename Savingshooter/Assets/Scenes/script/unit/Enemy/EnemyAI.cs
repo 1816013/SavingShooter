@@ -139,7 +139,7 @@ public class EnemyAI : MonoBehaviour
                 _lazerPointer.enabled = false;
                 _enemyShooting = _enemyAttack.GetComponent<EnemyShooting>();
                 _attackInterval = 2.0f;
-                _attackDistanse = 13.0f;
+                _attackDistanse = 10.0f;
                 _speed = 4.0f;
                 break;
             case EnemyType.ClossRange:

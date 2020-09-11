@@ -19,7 +19,7 @@ public class GameController : MonoBehaviour
     void Update()
     {
         fps = 1f / Time.deltaTime;
-      //  Debug.Log(fps);
+          Debug.Log(Time.timeSinceLevelLoad);
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             _pauseUI.SetActive(!_pauseUI.activeSelf);

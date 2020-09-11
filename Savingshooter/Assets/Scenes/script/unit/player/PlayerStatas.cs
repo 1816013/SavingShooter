@@ -8,7 +8,7 @@ public class PlayerStatas : MonoBehaviour
     private GameController _gameController = null;
     private Animator _animator;
     private float _playerEnergy = 200.0f; // エネルギー
-    private float _playerPower = 0.5f;  // 出力
+    private float _playerPower = 0.3f;  // 出力
     [SerializeField]
     private float _speedMax = 10f; // 最高速度
     private float _playerSpeed; // 現在速度
@@ -35,7 +35,7 @@ public class PlayerStatas : MonoBehaviour
 
         if (_playerPower > 0.5)
         {
-            _powerCost = (_playerPower - 0.5f) * 4 + 1.0f;    // 最大値1の時　3
+            _powerCost = (_playerPower - 0.5f) *2 + 1.0f;    // 最大値1の時　2
         }
         else
         {

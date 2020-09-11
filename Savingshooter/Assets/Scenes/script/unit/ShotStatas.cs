@@ -22,7 +22,7 @@ public class ShotStatas : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("enemy")|| other.CompareTag("Player") || other.CompareTag("Item") || other.CompareTag("shell"))
+        if (other.CompareTag("enemy")|| other.CompareTag("Player") || other.CompareTag("Item") || other.CompareTag("shell")|| other.CompareTag("enemyShot"))
         {
             return;
         }

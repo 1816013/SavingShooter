@@ -19,6 +19,7 @@ public class TpsShooting : MonoBehaviour
     private PlayerStatas _playerStatas;
     private Shoot _shoot;   
     private int _nowAmmo;
+    private const float _shotInterval = 0.2f / 3f;
     private float _shotTime = 0.0f;
     private bool _shotF = false;
     private bool _reloading = false;
@@ -44,26 +45,28 @@ public class TpsShooting : MonoBehaviour
         {
             if (!_reloading)
             {
-                _shotTime += 1;
+                _shotTime += Time.deltaTime;
                 if (Input.GetKey(KeyCode.Mouse0))
                 {
                     _animator.SetBool("shotF", true);
                     
-                    if (_shotTime % 5 == 0 && _nowAmmo > 0)
+                    if (_shotTime > _shotInterval && _nowAmmo > 0)
                     {
                         if (Time.timeScale != 0)
                         {
                             _audioSource.PlayOneShot(_audioClip);
                         }
                         _shotF = true;
+                        _shotTime = 0;
                     }
                 }
                 else
                 {
                     _animator.SetBool("shotF", false);
-                    if (_shotTime % 15 == 0 && _nowAmmo < 50)
+                    if (_shotTime > _shotInterval * 2 && _nowAmmo < 50)
                     {
                         _nowAmmo++;
+                        _shotTime = 0;
                     }
                 }
                 if (_nowAmmo == 0)
