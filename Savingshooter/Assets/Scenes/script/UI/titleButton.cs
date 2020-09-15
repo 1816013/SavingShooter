@@ -7,6 +7,6 @@ public class titleButton : MonoBehaviour
 {
     public void OnClickButton()
     {
-        SceneManager.LoadScene("gameScene");
+        SceneManager.LoadScene("RuleScene");
     }
 }
